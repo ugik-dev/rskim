@@ -1,0 +1,4 @@
+
+/application/config/database.php
+/uploads/photo/*
+/application/controllers/UserTempController.php
