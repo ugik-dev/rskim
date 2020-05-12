@@ -107,7 +107,7 @@ class WordController extends CI_Controller {
         $textrun->addText(" - ", 'paragraph', 'jus_p');
         $textrun->addText(" IgG : ".($data['hasil_igg'] == 'reaktif' ? 'Reaktif' : 'Non Reaktif'  ), 'paragraph_bold', 'jus_p');
  
-        $textrun->addText(" dan kami lampirkan Kit Rapid test hasil pemeriksaan. ", 'paragraph', 'jus_p');
+        $textrun->addText(" dan kami lampirkan hasil pemeriksaan Rapid Test. ", 'paragraph', 'jus_p');
         $textrun->addTextBreak();
         $textrun->addTextBreak();
         $textrun->addText("Demikian surat keterangan ini dibuat untuk dapat dipergunakan sebagaimana mestinya ", 'paragraph', 'jus_p');
