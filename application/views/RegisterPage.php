@@ -127,10 +127,10 @@
   <hr>
   <div class="row">
       <div class="col-md-6">
-          Pemerintah Provinsi Kepulauan Bangka Belitung
+          Rumah Sakit Kalbu Intan Medika
       </div>
       <div class="col-md-6 text-right">
-          <small>© 2019</small>
+          <small>© 2020</small>
           </div>
       </div>
   </div>

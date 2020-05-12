@@ -61,7 +61,7 @@
               <td rowspan="2">Formulir<br>RKA SKPD<br>2.2.1</td>
             </tr>
             <tr>
-              <td><b>PEMERINTAH PROVINSI KEPULAUAN BANGKA BELITUNG</b><br>Tahun Anggaran : <span id="tahun"></span></td>
+              <td><b>Rumah Sakit Kalbu Intan Medika</b><br>Tahun Anggaran : <span id="tahun"></span></td>
             </tr>
           </table>
           <table border="1">
