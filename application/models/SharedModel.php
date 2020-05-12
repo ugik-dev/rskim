@@ -15,7 +15,7 @@ class SharedModel extends CI_Model {
   public function getAllPuskesmas($filter = []){
     $this->db->select('*');
     $this->db->from('puskesmas');
-    // if(!empty($filter['curr_only']) && !empty($this->session->userdata('s_id_opd'))) $this->db->where('id_opd', $this->session->userdata('s_id_opd'));
+    if(!empty($filter['id_puskesmas'])) $this->db->where('id_puskesmas', $filter['id_puskesmas']);
     $this->db->ORDER_BY('id_puskesmas','ASC');
     $res = $this->db->get();
     return DataStructure::keyValue($res->result_array(), 'id_puskesmas');

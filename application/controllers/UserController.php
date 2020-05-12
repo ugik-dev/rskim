@@ -83,7 +83,7 @@ class UserController extends CI_Controller {
 					//generate simple random code
 					
 					//insert user to users table and get id
-					$serv = $this->UserModel->getServerSTMP();
+					$serv = $this->UserModel->getServerSTMP($registerData);
 					$user['email'] = $email;
 					$user['code'] = $code;
 					$id = $ret['user_temp_id'];
@@ -109,7 +109,7 @@ class UserController extends CI_Controller {
 					<p>".base_url()."index.php/activation/".$id."/".$code."</p>
 
 					";
-					$emailContent = '<!DOCTYPE><html><head></head><body><table width="600px" style="border:1px solid #cccccc;margin: auto;border-spacing:0;"><tr><td style="background:#F00000;padding-left:3%"><img src="https://integrasi.babelprov.go.id/covid19/assets/img/logo-babel.png" width="60px" vspace=0 /></td></tr>';
+					$emailContent = '<!DOCTYPE><html><head></head><body><table width="600px" style="border:1px solid #cccccc;margin: auto;border-spacing:0;"><tr><td style="background:#F00000;padding-left:3%"><img src="http://intanmedika.com/covid19/assets/img/logo-babel.png" width="60px" vspace=0 /></td></tr>';
 					$emailContent .='<tr><td style="height:20px"></td></tr>';
 				
 				
@@ -117,7 +117,7 @@ class UserController extends CI_Controller {
 				
 				
 					$emailContent .='<tr><td style="height:20px"></td></tr>';
-					$emailContent .= "<tr><td style='background:#000000;color: #999999;padding: 2%;text-align: center;font-size: 13px;'><p style='margin-top:1px;'><a href='ugik-dev.com/covid19/index.php/login' target='_blank' style='text-decoration:none;color: #60d2ff;'>ugik-dev.com/covid19/</a></p></td></tr></table></body></html>";    
+					$emailContent .= "<tr><td style='background:#000000;color: #999999;padding: 2%;text-align: center;font-size: 13px;'><p style='margin-top:1px;'><a href='ugik-dev.com/covid19/index.php/login' target='_blank' style='text-decoration:none;color: #60d2ff;'>intanmedika.com/covid19</a></p></td></tr></table></body></html>";    
 								 
 				
 				

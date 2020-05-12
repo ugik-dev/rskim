@@ -10,7 +10,20 @@ class WordController extends CI_Controller {
        $this->load->helper(array('DataStructure', 'Validation'));
     $this->db->db_debug = FALSE;
   }
-
+  function converRomawi($mm){
+    if($mm == '01') return 'I';
+    if($mm == '02') return 'II';
+    if($mm == '03') return 'III';
+    if($mm == '04') return 'IV';
+    if($mm == '05') return 'V';
+    if($mm == '06') return 'VI';
+    if($mm == '07') return 'VII';
+    if($mm == '08') return 'VIII';
+    if($mm == '09') return 'IX';
+    if($mm == '10') return 'X';
+    if($mm == '11') return 'XI';
+    if($mm == '12') return 'XII';
+  }
   function convertDateTime2($date,$cetak_hari){
     ;
     $hari = array ( 1 => 'Senin', 'Selasa', 'Rabu',
@@ -38,6 +51,7 @@ class WordController extends CI_Controller {
         $this->SecurityModel->userOnlyGuard(TRUE);
         ini_set('date.timezone', 'Asia/Jakarta');
         $tanggal = date('Y-m-d');
+        $no_tanggal = explode('-',$tanggal);
         $get = $this->input->get();
         $data = $this->DinkesModel->getAllRecord($this->input->get());
         $data = $data[$get['id_record']];
@@ -63,7 +77,7 @@ class WordController extends CI_Controller {
           
       
         $section->addText('SURAT KETERANGAN', $fontStyleName, $paragraphStyleName);
-        $section->addText('Nomor : ', 'cen_f', $paragraphStyleName);
+        $section->addText('Nomor :        /KIM-RM4/'.($this->converRomawi($no_tanggal[1])).'/2020 ', 'cen_f', $paragraphStyleName);
   
     
   
@@ -84,12 +98,16 @@ class WordController extends CI_Controller {
         $textrun->addTextBreak();
         $textrun->addText("\tPekerjaan\t\t\t: ".$dataPasien['0']['pekerjaan'],'paragraph', 'jus_p');
         $textrun->addTextBreak();
-        $textrun->addText("\tAlamat Lengkap\t\t: ".$dataPasien['0']['alamat'],'paragraph', 'jus_p');
+        $textrun->addText("\tAlamat Lengkap\t\t: ".$dataPasien['0']['alamat'].' , '.ucfirst(strtolower($dataPasien['0']['nama_kel'])).' , '.ucfirst(strtolower($dataPasien['0']['nama_kec'])).' , '.ucfirst(strtolower($dataPasien['0']['nama_kab'])),'paragraph', 'jus_p');
         $textrun->addTextBreak();
         $textrun->addTextBreak();
-        $textrun->addText("Telah kami rapid test Antobody IgM/IgG dengan hasil ", 'paragraph', 'jus_p');
-        $textrun->addText("Reaktif / Non Reaktif ", 'paragraph_bold', 'jus_p');
-        $textrun->addText("dan kami lampirkan Kit Rapid test hasil pemeriksaan. ", 'paragraph', 'jus_p');
+        $textrun->addText("Telah kami rapid test Antobody dengan hasil ", 'paragraph', 'jus_p');
+        
+        $textrun->addText("IgM : ".($data['hasil_igm'] == 'reaktif' ? 'Reaktif' : 'Non Reaktif' ) , 'paragraph_bold', 'jus_p');
+        $textrun->addText(" - ", 'paragraph', 'jus_p');
+        $textrun->addText(" IgG : ".($data['hasil_igg'] == 'reaktif' ? 'Reaktif' : 'Non Reaktif'  ), 'paragraph_bold', 'jus_p');
+ 
+        $textrun->addText(" dan kami lampirkan Kit Rapid test hasil pemeriksaan. ", 'paragraph', 'jus_p');
         $textrun->addTextBreak();
         $textrun->addTextBreak();
         $textrun->addText("Demikian surat keterangan ini dibuat untuk dapat dipergunakan sebagaimana mestinya ", 'paragraph', 'jus_p');

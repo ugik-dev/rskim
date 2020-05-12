@@ -5,7 +5,7 @@ class DinkesController extends CI_Controller {
 
   public function __construct(){
     parent::__construct();
-		$this->load->model(array('DinkesModel','UserModel'));
+		$this->load->model(array('DinkesModel','UserModel','SharedModel'));
     $this->load->helper(array('DataStructure', 'Validation'));
   }
   
@@ -319,22 +319,24 @@ class DinkesController extends CI_Controller {
       //    var_dump($data);
         $send['to'] = $to = $data['email'];
         if($tipe == 'new_jadwal_berbayar'){
+          $data_puskes = $this->SharedModel->getAllPuskesmas($data);
+          $data_puskes = $data_puskes[$data['id_puskesmas']];
           $send['subject'] = $subject = 'Pemberitahun Penjadwalan Uji Sampel BABEL PROV Covid - 19';   
-          $emailContent = '<!DOCTYPE><html><head></head><body><table width="600px" style="border:1px solid #cccccc;margin: auto;border-spacing:0;"><tr><td style="background:#F00000;padding-left:3%"><img src="https://integrasi.babelprov.go.id/covid19/assets/img/logo-babel.png" width="60px" vspace=0 /></td></tr>';
+          $emailContent = '<!DOCTYPE><html><head></head><body><table width="600px" style="border:1px solid #cccccc;margin: auto;border-spacing:0;"><tr><td style="background:#F00000;padding-left:3%"><img src="http://intanmedika.com/covid19/assets/img/logo-babel.png" width="60px" vspace=0 /></td></tr>';
           $emailContent .='<tr><td style="height:20px"></td></tr>';        
           $emailContent .= '';
           $emailContent .= '<br> Nama  : '.$data['nama'];
           $emailContent .= '<br> Tempat  : '.$data['rumah_sakit'];
           $emailContent .= '<br> Waktu : '.$this->convertDateTime2($data['tanggal_record']);
-          $emailContent .= '<br> Nomor Antri  : '.$data['id_record'];    
-          $emailContent .= '<br> ';
+          $emailContent .= '<br> Nomor Antri  : '.$data['no_antri'];    
+          $emailContent .= '<br> '. $data_puskes['bank'];
           $emailContent .= '<br> Dengan ini diinfokan untuk melakukan pembayaran terlebi dahulu, dan membawa bukti pembayaran beserta kartu identitas.<br> <br> ';  
           $emailContent .='<tr><td style="height:20px"></td></tr>';
-          $emailContent .= "<tr><td style='background:#000000;color: #999999;padding: 2%;text-align: center;font-size: 13px;'><p style='margin-top:1px;'><a href='ugik-dev.com/covid19/index.php/login' target='_blank' style='text-decoration:none;color: #60d2ff;'>ugik-dev.com/covid19/</a></p></td></tr></table></body></html>";    
+          $emailContent .= "<tr><td style='background:#000000;color: #999999;padding: 2%;text-align: center;font-size: 13px;'><p style='margin-top:1px;'><a href='intanmedika.com/covid19/index.php/login' target='_blank' style='text-decoration:none;color: #60d2ff;'>intanmedika.com/covid19/</a></p></td></tr></table></body></html>";    
           $send['message'] = $emailContent;  
          }else if($tipe == 'new_jadwal'){
           $send['subject'] = $subject = 'Pemberitahun Penjadwalan Uji Sampel BABEL PROV Covid - 19';   
-          $emailContent = '<!DOCTYPE><html><head></head><body><table width="600px" style="border:1px solid #cccccc;margin: auto;border-spacing:0;"><tr><td style="background:#F00000;padding-left:3%"><img src="https://integrasi.babelprov.go.id/covid19/assets/img/logo-babel.png" width="60px" vspace=0 /></td></tr>';
+          $emailContent = '<!DOCTYPE><html><head></head><body><table width="600px" style="border:1px solid #cccccc;margin: auto;border-spacing:0;"><tr><td style="background:#F00000;padding-left:3%"><img src="http://intanmedika.com/covid19/assets/img/logo-babel.png" width="60px" vspace=0 /></td></tr>';
           $emailContent .='<tr><td style="height:20px"></td></tr>';        
           $emailContent .= '';
           $emailContent .= '<br> Nama  : '.$data['nama'];
@@ -343,11 +345,11 @@ class DinkesController extends CI_Controller {
           $emailContent .= '<br> ';
           $emailContent .= '<br> Diharapkan Bapak / Ibu datang dengan membawakan kartu identitas.<br> <br> ';  
           $emailContent .='<tr><td style="height:20px"></td></tr>';
-          $emailContent .= "<tr><td style='background:#000000;color: #999999;padding: 2%;text-align: center;font-size: 13px;'><p style='margin-top:1px;'><a href='ugik-dev.com/covid19/index.php/login' target='_blank' style='text-decoration:none;color: #60d2ff;'>ugik-dev.com/covid19/</a></p></td></tr></table></body></html>";    
+          $emailContent .= "<tr><td style='background:#000000;color: #999999;padding: 2%;text-align: center;font-size: 13px;'><p style='margin-top:1px;'><a href='intanmedika.com/covid19/index.php/login' target='_blank' style='text-decoration:none;color: #60d2ff;'>intanmedika.com/covid19/</a></p></td></tr></table></body></html>";    
           $send['message'] = $emailContent;  
          }else if ($tipe == 'repair_jadwal'){
           $send['subject'] = $subject = 'Pemberitahun Penjadwalan Ulang Uji Sampel BABEL PROV Covid - 19';     
-          $emailContent = '<!DOCTYPE><html><head></head><body><table width="600px" style="border:1px solid #cccccc;margin: auto;border-spacing:0;"><tr><td style="background:#F00000;padding-left:3%"><img src="https://integrasi.babelprov.go.id/covid19/assets/img/logo-babel.png" width="60px" vspace=0 /></td></tr>';
+          $emailContent = '<!DOCTYPE><html><head></head><body><table width="600px" style="border:1px solid #cccccc;margin: auto;border-spacing:0;"><tr><td style="background:#F00000;padding-left:3%"><img src="http://intanmedika.com/covid19/assets/img/logo-babel.png" width="60px" vspace=0 /></td></tr>';
           $emailContent .='<tr><td style="height:20px"></td></tr>';        
           $emailContent .= '';
           $emailContent .= '<br> Nama  : '.$data['nama_pasien'];
@@ -356,26 +358,25 @@ class DinkesController extends CI_Controller {
           $emailContent .= '<br> ';
           $emailContent .= '<br> Diharapkan Bapak / Ibu datang dengan membawakan kartu identitas.<br> <br> ';  
           $emailContent .='<tr><td style="height:20px"></td></tr>';
-          $emailContent .= "<tr><td style='background:#000000;color: #999999;padding: 2%;text-align: center;font-size: 13px;'><p style='margin-top:1px;'><a href='ugik-dev.com/covid19/index.php/login' target='_blank' style='text-decoration:none;color: #60d2ff;'>ugik-dev.com/covid19/</a></p></td></tr></table></body></html>";    
+          $emailContent .= "<tr><td style='background:#000000;color: #999999;padding: 2%;text-align: center;font-size: 13px;'><p style='margin-top:1px;'><a href='intanmedika.com/covid19/index.php/login' target='_blank' style='text-decoration:none;color: #60d2ff;'>intanmedika.com/covid19/</a></p></td></tr></table></body></html>";    
           $send['message'] = $emailContent;  
     
         }else if ($tipe == 'final_rec'){
-          $send['subject'] = $subject = 'Pemberitahun Hasil Uji Sampel BABEL PROV Covid - 19';     
-          $emailContent = '<!DOCTYPE><html><head></head><body><table width="600px" style="border:1px solid #cccccc;margin: auto;border-spacing:0;"><tr><td style="background:#F00000;padding-left:3%"><img src="https://integrasi.babelprov.go.id/covid19/assets/img/logo-babel.png" width="60px" vspace=0 /></td></tr>';
+          $send['subject'] = $subject = 'Pemberitahun Hasil Lab';     
+          $emailContent = '<!DOCTYPE><html><head></head><body><table width="600px" style="border:1px solid #cccccc;margin: auto;border-spacing:0;"><tr><td style="background:#F00000;padding-left:3%"><img src="http://intanmedika.com/covid19/assets/img/logo-babel.png" width="60px" vspace=0 /></td></tr>';
           $emailContent .='<tr><td style="height:20px"></td></tr>';        
           $emailContent .= ' Dengan ini kami menyampaikan bahwa hasil uji sampel Bapak/Ibu sudah keluar dengan :';
           $emailContent .= '<br> Nama  : '.$data['nama'];
-          $emailContent .= '<br> Nomor Sampel  : '.$data['no_rekam'];
+          $emailContent .= '<br> Nomor Rekam Medis  : '.$data['no_rekam'];
           $emailContent .= '<br> Rumah Sakit : '.$data['rumah_sakit'];
-          $emailContent .= '<br> Hasil : '.$data['nama_status'];
           $emailContent .= '<br> ';
           $emailContent .='<tr><td style="height:20px"></td></tr>';
-          $emailContent .= "<tr><td style='background:#000000;color: #999999;padding: 2%;text-align: center;font-size: 13px;'><p style='margin-top:1px;'><a href='ugik-dev.com/covid19/index.php/login' target='_blank' style='text-decoration:none;color: #60d2ff;'>ugik-dev.com/covid19/</a></p></td></tr></table></body></html>";    
+          $emailContent .= "<tr><td style='background:#000000;color: #999999;padding: 2%;text-align: center;font-size: 13px;'><p style='margin-top:1px;'><a href='intanmedika.com/covid19/index.php/login' target='_blank' style='text-decoration:none;color: #60d2ff;'>intanmedika.com/covid19/</a></p></td></tr></table></body></html>";    
           $send['message'] = $emailContent;  
   
         }else if ($tipe == 'hasil'){
           $send['subject'] = $subject = 'Pemberitahun Hasil Uji Sampel BABEL PROV Covid - 19';     
-          $emailContent = '<!DOCTYPE><html><head></head><body><table width="600px" style="border:1px solid #cccccc;margin: auto;border-spacing:0;"><tr><td style="background:#F00000;padding-left:3%"><img src="https://integrasi.babelprov.go.id/covid19/assets/img/logo-babel.png" width="60px" vspace=0 /></td></tr>';
+          $emailContent = '<!DOCTYPE><html><head></head><body><table width="600px" style="border:1px solid #cccccc;margin: auto;border-spacing:0;"><tr><td style="background:#F00000;padding-left:3%"><img src="http://intanmedika.com/covid19/assets/img/logo-babel.png" width="60px" vspace=0 /></td></tr>';
           $emailContent .='<tr><td style="height:20px"></td></tr>';        
           $emailContent .= ' Dengan ini kami menyampaikan bahwa hasil uji sampel Bapak/Ibu sudah keluar dengan :';
           $emailContent .= '<br> Nama  : '.$data['nama_pasien'];
@@ -383,12 +384,12 @@ class DinkesController extends CI_Controller {
           $emailContent .= '<br> Waktu : '.$data['tanggal_pengambilan_sampel'];
           $emailContent .= '<br> ';
           $emailContent .='<tr><td style="height:20px"></td></tr>';
-          $emailContent .= "<tr><td style='background:#000000;color: #999999;padding: 2%;text-align: center;font-size: 13px;'><p style='margin-top:1px;'><a href='ugik-dev.com/covid19/index.php/login' target='_blank' style='text-decoration:none;color: #60d2ff;'>ugik-dev.com/covid19/</a></p></td></tr></table></body></html>";    
+          $emailContent .= "<tr><td style='background:#000000;color: #999999;padding: 2%;text-align: center;font-size: 13px;'><p style='margin-top:1px;'><a href='intanmedika.com/covid19/index.php/login' target='_blank' style='text-decoration:none;color: #60d2ff;'>intanmedika.com/covid19/</a></p></td></tr></table></body></html>";    
           $send['message'] = $emailContent;  
   
         }else if ($tipe == 'labor'){
           $send['subject'] = $subject = 'Pemberitahun Hasil Uji Laboratorim BABEL PROV Covid - 19';     
-          $emailContent = '<!DOCTYPE><html><head></head><body><table width="600px" style="border:1px solid #cccccc;margin: auto;border-spacing:0;"><tr><td style="background:#F00000;padding-left:3%"><img src="https://integrasi.babelprov.go.id/covid19/assets/img/logo-babel.png" width="60px" vspace=0 /></td></tr>';
+          $emailContent = '<!DOCTYPE><html><head></head><body><table width="600px" style="border:1px solid #cccccc;margin: auto;border-spacing:0;"><tr><td style="background:#F00000;padding-left:3%"><img src="http://intanmedika.com/covid19/assets/img/logo-babel.png" width="60px" vspace=0 /></td></tr>';
           $emailContent .='<tr><td style="height:20px"></td></tr>';        
           $emailContent .= ' Dengan ini kami menyampaikan bahwa hasil uji lab Bapak/Ibu sudah keluar dengan :';
           $emailContent .= '<br> Nama  : '.$data['nama_pasien'];
@@ -396,12 +397,12 @@ class DinkesController extends CI_Controller {
           $emailContent .= '<br> Waktu : '.$data['tanggal_hasil_labor'];
           $emailContent .= '<br> ';
           $emailContent .='<tr><td style="height:20px"></td></tr>';
-          $emailContent .= "<tr><td style='background:#000000;color: #999999;padding: 2%;text-align: center;font-size: 13px;'><p style='margin-top:1px;'><a href='ugik-dev.com/covid19/index.php/login' target='_blank' style='text-decoration:none;color: #60d2ff;'>ugik-dev.com/covid19/</a></p></td></tr></table></body></html>";    
+          $emailContent .= "<tr><td style='background:#000000;color: #999999;padding: 2%;text-align: center;font-size: 13px;'><p style='margin-top:1px;'><a href='intanmedika.com/covid19/index.php/login' target='_blank' style='text-decoration:none;color: #60d2ff;'>intanmedika.com/covid19/</a></p></td></tr></table></body></html>";    
           $send['message'] = $emailContent;  
   
         }else if ($tipe == 'changepassword'){
           $send['subject'] = $subject = 'Pemberitahun Informasi Login BABEL PROV Covid - 19';     
-          $emailContent = '<!DOCTYPE><html><head></head><body><table width="600px" style="border:1px solid #cccccc;margin: auto;border-spacing:0;"><tr><td style="background:#F00000;padding-left:3%"><img src="https://integrasi.babelprov.go.id/covid19/assets/img/logo-babel.png" width="60px" vspace=0 /></td></tr>';
+          $emailContent = '<!DOCTYPE><html><head></head><body><table width="600px" style="border:1px solid #cccccc;margin: auto;border-spacing:0;"><tr><td style="background:#F00000;padding-left:3%"><img src="http://intanmedika.com/covid19/assets/img/logo-babel.png" width="60px" vspace=0 /></td></tr>';
           $emailContent .='<tr><td style="height:20px"></td></tr>';        
           $emailContent .= ' Dengan ini kami menyampaikan bahwa data login anda sudah dirubah, dengan data sebagai berikut :';
           $emailContent .= '<br> Nama  : '.$data['nama'];
@@ -410,12 +411,12 @@ class DinkesController extends CI_Controller {
           $emailContent .= '<br> Password : '.$data['password'];
           $emailContent .= '<br> ';
           $emailContent .='<tr><td style="height:20px"></td></tr>';
-          $emailContent .= "<tr><td style='background:#000000;color: #999999;padding: 2%;text-align: center;font-size: 13px;'><p style='margin-top:1px;'><a href='ugik-dev.com/covid19/index.php/login' target='_blank' style='text-decoration:none;color: #60d2ff;'>ugik-dev.com/covid19/</a></p></td></tr></table></body></html>";    
+          $emailContent .= "<tr><td style='background:#000000;color: #999999;padding: 2%;text-align: center;font-size: 13px;'><p style='margin-top:1px;'><a href='intanmedika.com/covid19/index.php/login' target='_blank' style='text-decoration:none;color: #60d2ff;'>intanmedika.com/covid19/</a></p></td></tr></table></body></html>";    
           $send['message'] = $emailContent;  
   
         }else if ($tipe == 'newuser'){
           $send['subject'] = $subject = 'Pemberitahun Informasi Login BABEL PROV Covid - 19';     
-          $emailContent = '<!DOCTYPE><html><head></head><body><table width="600px" style="border:1px solid #cccccc;margin: auto;border-spacing:0;"><tr><td style="background:#F00000;padding-left:3%"><img src="https://integrasi.babelprov.go.id/covid19/assets/img/logo-babel.png" width="60px" vspace=0 /></td></tr>';
+          $emailContent = '<!DOCTYPE><html><head></head><body><table width="600px" style="border:1px solid #cccccc;margin: auto;border-spacing:0;"><tr><td style="background:#F00000;padding-left:3%"><img src="http://intanmedika.com/covid19/assets/img/logo-babel.png" width="60px" vspace=0 /></td></tr>';
           $emailContent .='<tr><td style="height:20px"></td></tr>';        
           $emailContent .= ' Dengan ini kami menyampaikan bahwa data login anda sebagai berikut :';
           $emailContent .= '<br> Nama  : '.$data['nama'];
@@ -424,14 +425,13 @@ class DinkesController extends CI_Controller {
           $emailContent .= '<br> Password : '.$data['password'];
           $emailContent .= '<br> ';
           $emailContent .='<tr><td style="height:20px"></td></tr>';
-          $emailContent .= "<tr><td style='background:#000000;color: #999999;padding: 2%;text-align: center;font-size: 13px;'><p style='margin-top:1px;'><a href='ugik-dev.com/covid19/index.php/login' target='_blank' style='text-decoration:none;color: #60d2ff;'>ugik-dev.com/covid19/</a></p></td></tr></table></body></html>";    
+          $emailContent .= "<tr><td style='background:#000000;color: #999999;padding: 2%;text-align: center;font-size: 13px;'><p style='margin-top:1px;'><a href='intanmedika.com/covid19/index.php/login' target='_blank' style='text-decoration:none;color: #60d2ff;'>intanmedika.com/covid19</a></p></td></tr></table></body></html>";    
           $send['message'] = $emailContent;  
   
         }
 
 
-      $serv = $this->UserModel->getServerSTMP();  
-
+      $serv = $this->UserModel->getServerSTMP($data);  
       $config['protocol']    = 'smtp';
       $config['smtp_host']    = $serv['url_'];
       $config['smtp_port']    = '587';

@@ -50,11 +50,19 @@ class UserModel extends CI_Model {
 	   
 	  }
 
-	  public function getServerSTMP(){
-      
+	  public function getServerSTMP($filter){
+		if(!empty($filter['id_puskesmas'])){
+			if($filter['id_puskesmas'] == '2'){
+				$tipe = 'stmp_rskim' ;
+			}else{
+				$tipe = 'stmp_mail' ;
+			}
+		}else{
+			$tipe = 'stmp_mail' ;
+		}
 		$this->db->select("*");
 		$this->db->from("config_covid as ssk");
-		$this->db->where("ssk.type", 'stmp_mail');
+		$this->db->where("ssk.type", $tipe);
 		$res = $this->db->get();
 		$res = $res->result_array();
 		// var_dump($res);

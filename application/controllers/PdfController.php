@@ -172,26 +172,33 @@ public function getPDFRecordRS(){
   $pdf->Cell(40,7,': '.$data['no_rekam'] ,0,0);
   $pdf->Cell(35,7,'',0,0);
   $pdf->Cell(35,7,'Nama Pasien',0,0);
-  $pdf->Cell(40,7,': '.$dataPasien['0']['nama'] ,0,1);
+  $pdf->MultiCell(40,7,': '.$dataPasien['0']['nama'] ,0,1);
 
   $pdf->Cell(35,7,'Tgl Rekam',0,0);
   $pdf->Cell(40,7,': '.substr($data['tanggal_record'],0,15) ,0,0);
   $pdf->Cell(35,7,'',0,0);
-  $pdf->Cell(35,7,'Alamat Pasien',0,0);
-  $pdf->Cell(40,7,': '.$dataPasien['0']['alamat'] ,0,1);
-
+  $pdf->Cell(35,7,'Umur',0,0);
+  $pdf->Cell(40,7,': '.$this->getAge($dataPasien['0']['tanggal_lahir']) ,0,1);
   $pdf->Cell(35,7,'Tgl Hasil Selesai',0,0);
   $pdf->Cell(40,7,': '.substr($data['tanggal_hasil_labor'],0,15) ,0,0);
   $pdf->Cell(35,7,'',0,0);
-  $pdf->Cell(35,7,'Umur',0,0);
-  $pdf->Cell(40,7,': '.$this->getAge($dataPasien['0']['tanggal_lahir']) ,0,1);
+  $pdf->Cell(35,7,'Kabupaten/Kota',0,0);
+  $pdf->MultiCell(40,7,': '.ucfirst(strtolower($dataPasien['0']['nama_kab'])) ,0,1);
+
+
+
 
   $pdf->Cell(35,7,'Dokter Pengirim',0,0);
-  $pdf->Cell(40,7,': '.$data['dokter_nama'] ,0,1);
- 
+  $pdf->Cell(40,7,': '.$data['dokter_nama'] ,0,0);
+  $pdf->Cell(35,7,'',0,0);
+  $pdf->Cell(35,7,'Alamat Pasien',0,0);
+  $pdf->MultiCell(40,7,': '.$dataPasien['0']['alamat'].' , '.ucfirst(strtolower($dataPasien['0']['nama_kel'])).' , '.ucfirst(strtolower($dataPasien['0']['nama_kec'])) ,0,1);
+
+  $x = $pdf->GetX();
+  $y = $pdf->GetY();
   $pdf->SetLineWidth(0);
-  $pdf->Line(10,89,200,89);
-  $pdf->Line(10,97,200,97);
+  $pdf->Line(10,$y+4,200,$y+4);
+  $pdf->Line(10,$y+12,200,$y+12);
   $pdf->Cell(35,5,'',0,1);
   $pdf->SetFont('Arial','B',10);
   $pdf->Cell(40,7,'PEMERIKSAAN ',0,0);
