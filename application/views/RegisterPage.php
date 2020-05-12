@@ -28,7 +28,7 @@
               </div>
               <div class="form-group">
               <label for="terdata">Nama Kepala Keluarga (Sesuai KK)</label> 
-                  <input type="text" class="form-control" name="nama_krt" placeholder="Nama Kepala Rumah Tangga" required="required" autocomplete="current-password">
+                  <input type="text" class="form-control" name="nama_krt" placeholder="Nama Kepala Keluarga (Sesuai KK)" required="required" autocomplete="current-password">
                 </div>
                 <div class="form-group">
               <label for="terdata">Nomor Hp</label> 
