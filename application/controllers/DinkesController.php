@@ -330,7 +330,7 @@ class DinkesController extends CI_Controller {
           $emailContent .= '<br> Waktu : '.$this->convertDateTime2($data['tanggal_record']);
           $emailContent .= '<br> Nomor Antri  : '.$data['no_antri'];    
           $emailContent .= '<br> '. $data_puskes['bank'];
-          $emailContent .= '<br> Dengan ini diinfokan untuk melakukan pembayaran terlebi dahulu, dan membawa bukti pembayaran beserta kartu identitas.<br> <br> ';  
+          $emailContent .= '<br> Dengan ini diinfokan untuk melakukan pembayaran terlebih dahulu, dan membawa bukti pembayaran beserta kartu identitas.<br> <br> ';  
           $emailContent .='<tr><td style="height:20px"></td></tr>';
           $emailContent .= "<tr><td style='background:#000000;color: #999999;padding: 2%;text-align: center;font-size: 13px;'><p style='margin-top:1px;'><a href='intanmedika.com/covid19/index.php/login' target='_blank' style='text-decoration:none;color: #60d2ff;'>intanmedika.com/covid19/</a></p></td></tr></table></body></html>";    
           $send['message'] = $emailContent;  

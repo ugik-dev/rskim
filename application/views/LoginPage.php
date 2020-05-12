@@ -23,7 +23,7 @@
           <button type="submit" id="loginBtn" class="btn btn-primary block full-width m-b" data-loading-text="Loging In...">Login</button>
       
         </form>
-        <button type="submit" class="btn btn-primary block full-width m-b" value="Go to my link location"  onclick="window.location='<?=site_url()?>register';">Register</button>
+        <button type="submit" class="btn btn-primary block full-width m-b" value="Go to my link location"  onclick="window.location='<?=site_url()?>register';">Register Pasien Baru</button>
    
         <p class="m-t">
           <small>@developers</small>

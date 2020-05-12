@@ -15,7 +15,7 @@
           <div class="row">
             <div class="col-lg-6">
               <div class="form-group">
-               <label for="terdata">Username</label> 
+               <label for="terdata">Username (Min 6)</label> 
                 <input type="text" class="form-control" id="username" name="username" placeholder="Username" required="required" autocomplete="username">
               </div>
               <div class="form-group">
@@ -27,7 +27,7 @@
                   <input type="password" class="form-control"  id="repassword" name="repassword" placeholder="Re-Password" required="required" autocomplete="current-repassword">
               </div>
               <div class="form-group">
-              <label for="terdata">Nama Kepala Rumah Tangga</label> 
+              <label for="terdata">Nama Kepala Keluarga (Sesuai KK)</label> 
                   <input type="text" class="form-control" name="nama_krt" placeholder="Nama Kepala Rumah Tangga" required="required" autocomplete="current-password">
                 </div>
                 <div class="form-group">
