@@ -163,7 +163,7 @@ class UserModel extends CI_Model {
 			 'status', 'email', 'nomorhp', 'alamat',
 			  'jenis_kelamin',
 			   'tempat_lahir',  'id_puskesmas', 'pasca_hamil',  'nama_krt', 
-			   'tanggal_lahir','kewarganegaraan','kategori','st_perkawinan','pekerjaan'
+			   'tanggal_lahir','kewarganegaraan','kategori','st_perkawinan','pekerjaan','kode_wilayah'
 		  ], TRUE));
 		  ExceptionHandler::handleDBError($this->db->error(), "Tambah Data Pasien", "data_pasien");
 	  	return $this->db->insert_id();
@@ -174,13 +174,11 @@ class UserModel extends CI_Model {
 			 'status', 'email', 'nomorhp', 'alamat',
 			  'jenis_kelamin',
 			   'tempat_lahir', 'pasca_hamil',  'nama_krt', 'id_puskesmas',
-			   'tanggal_lahir','kewarganegaraan','kategori','st_perkawinan','pekerjaan'
+			   'tanggal_lahir','kewarganegaraan','kategori','st_perkawinan','pekerjaan','kode_wilayah'
 		  ], TRUE));
 		  ExceptionHandler::handleDBError($this->db->error(), "Tambah Data Pasien", "data_pasien");
 	  	$ret['data_id']= $this->db->insert_id();
 
-		// $pasien = $this->db->insert_id();
-		// $data['id_role']= '3';
 		$data['id_data_pasien']= $ret['data_id'];
 		// $data['password'] = md5($data['password']);
 

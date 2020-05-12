@@ -105,7 +105,7 @@
         </div>
       </div>
     </div>
-    <div class="col-lg-12">
+    <div class="col-lg-8">
       <div class="ibox">
         <div class="ibox-content">
           <h5>Alamat</h5>
@@ -113,6 +113,14 @@
         </div>
       </div>
     </div>
+    <div class="col-lg-4">
+        <div class="ibox">
+          <div class="ibox-content">
+            <h5>Provinsi</h5>
+            <p class="no-margins"><span id="nama_prov">-</span></p>
+          </div>
+        </div>
+      </div>
  
  
     <div hidden class="col-lg-4">
@@ -434,6 +442,11 @@
             <label for="alamat">Alamat</label> 
             <textarea rows="4" type="text" placeholder="Alamat" class="form-control" id="alamat" name="alamat" required="required"></textarea>
                </div>
+               <div class="form-group">
+            <label for="terdata">Provinsi</label> 
+            <select class="form-control mr-sm-2" id="sl_prov" name="sl_prov" required="required">
+            </select>
+          </div>
           <div class="form-group">
             <label for="terdata">Kabupaten / Kota</label> 
             <select class="form-control mr-sm-2" id="sl_kab" name="KDKAB" required="required">
@@ -449,6 +462,8 @@
             <select class="form-control mr-sm-2" id="sl_kel" name="KDKEL" required="required">
             </select>
           </div>
+          <input hidden type="text" class="form-control"  id="kode_wilayah" name="kode_wilayah" placeholder="kode_wilayah" required="required" autocomplete="current-password">
+     
           <button class="btn btn-success my-1 mr-sm-2" type="submit" id="add_btn" data-loading-text="Loading..." onclick="this.form.target='add'"><strong>Tambah Data</strong></button>
           <button class="btn btn-success my-1 mr-sm-2" type="submit" id="save_edit_btn" data-loading-text="Loading..." onclick="this.form.target='edit'"><strong>Simpan Perubahan</strong></button>
           </form>             
@@ -545,6 +560,7 @@ console.log(sessionData)
     'active': $('#info_container').find('#active'),
     'nama_kab': $('#info_container').find('#nama_kab'),
     'nama_kec': $('#info_container').find('#nama_kec'),
+    'nama_prov': $('#info_container').find('#nama_prov'),
     'nama_kel': $('#info_container').find('#nama_kel'),
     'jenis_kelamin': $('#info_container').find('#jenis_kelamin'),
     'tempat_lahir': $('#info_container').find('#tempat_lahir'),
@@ -629,6 +645,8 @@ console.log(sessionData)
     'id_status': $('#pasien_modal').find('#id_status'),
     'sl_puskesmas': $('#pasien_modal').find('#sl_puskesmas'),
     'sl_kab': $('#pasien_modal').find('#sl_kab'),
+    'sl_prov': $('#pasien_modal').find('#sl_prov'),
+    'kode_wilayah': $('#pasien_modal').find('#kode_wilayah'),
  
     'sl_kec': $('#pasien_modal').find('#sl_kec'),
     'sl_kel': $('#pasien_modal').find('#sl_kel'),
@@ -654,7 +672,7 @@ console.log(sessionData)
   getInfo();
   function getInfo(){
     return $.ajax({
-        url: `<?php echo site_url('DinkesController/getAllPasien/')?>`, 'type': 'GET',
+        url: `<?php echo site_url('DinkesController/getAllPasienProv/')?>`, 'type': 'GET',
        data : {id_pasien: id_pasien},
       success: function (data){
         var json = JSON.parse(data);
@@ -719,6 +737,7 @@ function getAge(date) {
     info.nama_kab.html(`${dataInfo['nama_kab']}`);
     info.nama_kec.html(`${dataInfo['nama_kec']}`);
     info.nama_kel.html(`${dataInfo['nama_kel']}`);
+    info.nama_prov.html(`${dataInfo['nama_prov']}`);
     info.info_nama_krt.html(`${dataInfo['nama_krt']}`);
     info.info_pekerjaan.html(`${dataInfo['pekerjaan']}`);
     info.info_kewarganegaraan.html(`${dataInfo['kewarganegaraan']}`);
@@ -746,9 +765,10 @@ function getAge(date) {
     var renderData = [];
     Object.values(data).forEach((record) => {
       var detailButton = `<a class="btn btn-success" href="<?=site_url("RSController/DetailRecord/")?>?id_record=${record['id_record']}" class="dropdown-item"><i class='fa fa-pencil'></i>Form Rekam Medis</a>`;
-      var pembayaranButton = `<button class="pembayaran btn btn-warning" data-id='${record['id_record']}'><i class='fa fa-note'></i>Belum Terkonfirmasi Pembayaran</button>`;
+      var pembayaranButton = `<button class="pembayaran btn btn-warning" data-id='${record['id_record']}'><i class='fa fa-note'></i> Konfirmasi Pembayaran</button>`;
       if(sessionData['id_role'] == 3 ){
-        pembayaranButton = `<button class="btn btn-warning"><i class='fa fa-note'></i>Konfirmasi Pembayaran</button>`;
+        pembayaranButton = `<button class="btn btn-warning"><i class='fa fa-note'></i>Belum Konfirmasi Pembayaran</button>`;
+      
       }
       var deleteButton = `
         <a class="delete dropdown-item" data-id='${record['id_record']}'><i class='fa fa-trash'></i> Hapus Record</a>
@@ -1087,9 +1107,6 @@ function getAge(date) {
     PasienModal.id_status.val(dataInfo['status']);
     PasienModal.id_user.val(dataInfo['id_user']);
     // reset_pasienmodal();
-    PasienModal.sl_kab.val(dataInfo['KDKAB']).trigger('change');
-    GlobalTemp = dataInfo;
-    console.log(GlobalTemp)
     // PasienModal.sl_kec.val(pasien['KDKEC']).trigger('change');
     PasienModal.nama_krt.val(dataInfo['nama_krt']);
     PasienModal.NIK.val(dataInfo['NIK']);
@@ -1105,6 +1122,11 @@ function getAge(date) {
     PasienModal.sl_kategori.val(dataInfo['kategori']);
     PasienModal.st_perkawinan.val(dataInfo['st_perkawinan']);
     PasienModal.sl_puskesmas.val(dataInfo['id_puskesmas']);
+    // PasienModal.sl_prov.val(dataInfo['sl_prov']);
+    GlobalTemp = dataInfo['kode_wilayah'].split(".");
+    PasienModal.sl_prov.val(GlobalTemp[0]).trigger('change');
+    // PasienModal.sl_kab.val(dataInfo['KDKAB']).trigger('change');
+    PasienModal.kode_wilayah.val(dataInfo['kode_wilayah']);
     if(dataInfo['jenis_kelamin'] == 'P'){
         PasienModal.sl_hamil.prop('disabled',false)
         PasienModal.sl_hamil.val(dataInfo['pasca_hamil']); 
@@ -1123,6 +1145,25 @@ function getAge(date) {
           PasienModal.sl_hamil.prop('disabled',true)     
       }
     });
+  PasienModal.sl_prov.on('change', (e) => {
+    if(PasienModal.sl_prov.val() != ''){
+      PasienModal.sl_kab.empty();
+    PasienModal.sl_kec.empty();
+    PasienModal.sl_kel.empty();
+    PasienModal.sl_kab.val(null);
+    PasienModal.sl_kec.val(null);
+    PasienModal.sl_kel.val(null);
+      getAllKabOption()
+    }else{
+      PasienModal.sl_kab.empty();
+    PasienModal.sl_kec.empty();
+    PasienModal.sl_kel.empty();
+    PasienModal.sl_kab.val(null);
+    PasienModal.sl_kec.val(null);
+    PasienModal.sl_kel.val(null);
+    }
+  });
+
   PasienModal.sl_kab.on('change', (e) => {
     if(PasienModal.sl_kab.val() != ''){
     PasienModal.sl_kec.empty();
@@ -1147,11 +1188,34 @@ function getAge(date) {
     PasienModal.sl_kel.val(null);
     }
   });
-  getAllKab();
-  function getAllKab(){
+  PasienModal.sl_kel.on('change', (e) => {
+    
+    PasienModal.kode_wilayah.val(PasienModal.sl_kel.val());
+   
+  });
+  getAllProv();
+  function getAllProv(){
     return $.ajax({
-      url: `<?php echo site_url('SharedController/getAllKab/')?>`, 'type': 'POST',
+      url: `<?php echo site_url('SharedController/getAllProv/')?>`, 'type': 'POST',
       data: {},
+      success: function (data){
+        var json = JSON.parse(data);
+        if(json['error']){
+          return;
+        }
+        dataRole = json['data'];
+        // renderKabSelectionFilter(dataRole);
+        renderProvOptionFilter(dataRole);
+      },
+      error: function(e) {}
+    });
+  }
+
+  function getAllKabOption(){
+    kd_prov = PasienModal.sl_prov.val();
+    return $.ajax({
+      url: `<?php echo site_url('SharedController/getAllKabProv/')?>`, 'type': 'POST',
+      data: {kd_prov : kd_prov},
       success: function (data){
         var json = JSON.parse(data);
         if(json['error']){
@@ -1187,7 +1251,7 @@ function getAge(date) {
   function getAllKecOption(){
     kd_kab = PasienModal.sl_kab.val();
      $.ajax({
-      url: `<?php echo site_url('SharedController/getAllKec/')?>`, 'type': 'POST',
+      url: `<?php echo site_url('SharedController/getAllKecProv/')?>`, 'type': 'POST',
       data: {kd_kab : kd_kab},
       success: function (data){
         var json = JSON.parse(data);
@@ -1206,7 +1270,7 @@ function getAge(date) {
       kd_kec = PasienModal.sl_kec.val();
       kd_kab = PasienModal.sl_kab.val();
       return $.ajax({
-        url: `<?php echo site_url('SharedController/getAllKel/')?>`, 'type': 'POST',
+        url: `<?php echo site_url('SharedController/getAllKelProv/')?>`, 'type': 'POST',
         data: {kd_kec : kd_kec, kd_kab : kd_kab},
         success: function (data){
           var json = JSON.parse(data);
@@ -1219,7 +1283,8 @@ function getAge(date) {
         error: function(e) {}
       });
     }
-  function renderKabOptionFilter(data){
+
+    function renderProvOptionFilter(data){
       PasienModal.sl_kelamin.append($('<option>', { value: "", text: "-- Pilih Jenis Kelamin"}));
       PasienModal.sl_kelamin.append($('<option>', { value: "L", text: "Laki-laki"}));
       PasienModal.sl_kelamin.append($('<option>', { value: "P", text: "Perempuan"}));
@@ -1238,13 +1303,13 @@ function getAge(date) {
       PasienModal.sl_hamil.append($('<option>', { value: "Tidak", text: "Tidak"}));
 
 
-      PasienModal.sl_kab.empty();
-      PasienModal.sl_kab.append($('<option>', { value: "", text: "-- Pilih Kabupaten --"}));
+      PasienModal.sl_prov.empty();
+      PasienModal.sl_prov.append($('<option>', { value: "", text: "-- Pilih Provinsi --"}));
 
       Object.values(data).forEach((d) => {
-        PasienModal.sl_kab.append($('<option>', {
-          value: d['id_kd_kab'],
-          text:  d['nama_kab'],
+        PasienModal.sl_prov.append($('<option>', {
+          value: d['kode'],
+          text:  d['nama'],
           // text: d['id_kd_kab'] + ' :: ' + d['nama_kab'],
 
         }));
@@ -1252,7 +1317,27 @@ function getAge(date) {
 
 
       if(GlobalTemp != undefined){
-        PasienModal.sl_kab.val(GlobalTemp['KDKAB']).trigger('change')
+        PasienModal.sl_prov.val(GlobalTemp['KDKAB']).trigger('change')
+      }
+  }
+
+  function renderKabOptionFilter(data){
+      
+      PasienModal.sl_kab.empty();
+      PasienModal.sl_kab.append($('<option>', { value: "", text: "-- Pilih Kabupaten --"}));
+
+      Object.values(data).forEach((d) => {
+        PasienModal.sl_kab.append($('<option>', {
+          value: d['kode'],
+          text:  d['nama'],
+          // text: d['id_kd_kab'] + ' :: ' + d['nama_kab'],
+
+        }));
+      });
+
+
+      if(GlobalTemp != undefined){
+        PasienModal.sl_kab.val(GlobalTemp[0]+'.'+GlobalTemp[1]).trigger('change')
       }
   }
 
@@ -1274,14 +1359,14 @@ PasienModal.sl_kec.empty();
 PasienModal.sl_kec.append($('<option>', { value: "", text: "-- Pilih Kecamatan --"}));
 Object.values(data).forEach((d) => {
   PasienModal.sl_kec.append($('<option>', {
-    value: d['KodeKec'],
-    text:  d['Kecamatan'],
+    value: d['kode'],
+    text:  d['nama'],
     // text: d['id_kd_kab'] + ' :: ' + d['nama_kab'],
   }));
 });
 
 if(GlobalTemp != undefined){
-  PasienModal.sl_kec.val(GlobalTemp['KDKEC']).trigger('change')
+  PasienModal.sl_kec.val(GlobalTemp[0]+'.'+GlobalTemp[1]+'.'+GlobalTemp[2]).trigger('change')
 }
 }
 
@@ -1290,12 +1375,12 @@ PasienModal.sl_kel.empty();
 PasienModal.sl_kel.append($('<option>', { value: "", text: "-- Pilih Kelurahan --"}));
 Object.values(data).forEach((d) => {
   PasienModal.sl_kel.append($('<option>', {
-    value: d['KodeKel'],
-    text:  d['Kelurahan'],
+    value: d['kode'],
+    text:  d['nama'],
   }));
 });
 if(GlobalTemp != undefined){
-  PasienModal.sl_kel.val(GlobalTemp['KDKEL'])
+  PasienModal.sl_kel.val(GlobalTemp[0]+'.'+GlobalTemp[1]+'.'+GlobalTemp[2]+'.'+GlobalTemp[3])
 }
 }
 

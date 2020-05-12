@@ -149,10 +149,10 @@ public function getPDFRecordRS(){
  $data = $data[$get['id_record']];
  $dataRecord = $this->DinkesModel->getAllRecord(array('id_pasien' => $data['id_pasien'],'isSelf' => '1'));
 
- $dataPasien = $this->DinkesModel->getAllPasien_v2(array('id_pasien' => $data['id_pasien']));
+ $dataPasien = $this->DinkesModel->getAllPasienProv(array('id_pasien' => $data['id_pasien']));
  $dataKontak = $this->PasienModel->getAllKontak(array('id_pasien' => $data['id_pasien']));
  $dataTracking = $this->PasienModel->getAllTracking(array('id_pasien' => $data['id_pasien']));
-
+ $dataPasien = $dataPasien[$data['id_pasien']];
     // var_dump($dataPasien);
   $pdf = new FPDF('p','mm','A4');
   // Menambah halaman baru
@@ -172,18 +172,18 @@ public function getPDFRecordRS(){
   $pdf->Cell(40,7,': '.$data['no_rekam'] ,0,0);
   $pdf->Cell(35,7,'',0,0);
   $pdf->Cell(35,7,'Nama Pasien',0,0);
-  $pdf->MultiCell(40,7,': '.$dataPasien['0']['nama'] ,0,1);
+  $pdf->MultiCell(40,7,': '.$dataPasien['nama'] ,0,1);
 
   $pdf->Cell(35,7,'Tgl Rekam',0,0);
   $pdf->Cell(40,7,': '.substr($data['tanggal_record'],0,15) ,0,0);
   $pdf->Cell(35,7,'',0,0);
   $pdf->Cell(35,7,'Umur',0,0);
-  $pdf->Cell(40,7,': '.$this->getAge($dataPasien['0']['tanggal_lahir']) ,0,1);
+  $pdf->Cell(40,7,': '.$this->getAge($dataPasien['tanggal_lahir']) ,0,1);
   $pdf->Cell(35,7,'Tgl Hasil Selesai',0,0);
   $pdf->Cell(40,7,': '.substr($data['tanggal_hasil_labor'],0,15) ,0,0);
   $pdf->Cell(35,7,'',0,0);
-  $pdf->Cell(35,7,'Kabupaten/Kota',0,0);
-  $pdf->MultiCell(40,7,': '.ucfirst(strtolower($dataPasien['0']['nama_kab'])) ,0,1);
+  $pdf->Cell(35,7,'Provinsi',0,0);
+  $pdf->MultiCell(40,7,': '.ucfirst(strtolower($dataPasien['nama_prov'])) ,0,1);
 
 
 
@@ -192,7 +192,7 @@ public function getPDFRecordRS(){
   $pdf->Cell(40,7,': '.$data['dokter_nama'] ,0,0);
   $pdf->Cell(35,7,'',0,0);
   $pdf->Cell(35,7,'Alamat Pasien',0,0);
-  $pdf->MultiCell(40,7,': '.$dataPasien['0']['alamat'].' , '.ucfirst(strtolower($dataPasien['0']['nama_kel'])).' , '.ucfirst(strtolower($dataPasien['0']['nama_kec'])) ,0,1);
+  $pdf->MultiCell(40,7,': '.$dataPasien['alamat'].' , '.ucfirst(strtolower($dataPasien['nama_kab'])).' , '.ucfirst(strtolower($dataPasien['nama_kel'])).' , '.ucfirst(strtolower($dataPasien['nama_kec'])) ,0,1);
 
   $x = $pdf->GetX();
   $y = $pdf->GetY();
@@ -233,7 +233,10 @@ public function getPDFRecordRS(){
   $pdf->Cell(30,7,'',0,1);
   $pdf->Cell(30,7,'',0,1);
   $pdf->Cell(30,7,'',0,0);
-  $pdf->MultiCell(150,6,"Catatan : \n".$data['deskripsi'],0,'L');
+  $pdf->MultiCell(130,6,"Catatan : \n".$data['deskripsi'],0,'L');
+  $pdf->Cell(30,7,'',0,1);
+  $pdf->Cell(30,7,'',0,0);
+  $pdf->MultiCell(130,6,"Hasil Rapid Test Covid-19 NEGATIVE belum dapat menyingkirkan diagnosa Covid-19. \nSaran dilakukan pemeriksaan ulang rapid test Covid-19 di hari ke 7-10. \nBila ada kecurigaan ke arah diagnosa Covid-19, periksa swab rt-PCR sebagai gold standar. \nApabila ada riwayat kontak dengan penderita Covid-19, harus lakukan isolasi mandiri sampai dengan keluar hasil pemeriksaan metode rt-PCR atau hasil test ke 2. \nHasil Rapid Test Covid-19 POSITIVE harus dilakukan konfirmasi dengan test rt-PCR Covid-19.",0,'L');
 
     // $pdf = new FPDF('p','mm','A4');
     // Menambah halaman baru
@@ -328,7 +331,7 @@ foreach($dataTracking as $pi){
   $pdf->Ln($h-7);
   }
 
-$pdf->Output('D',$dataPasien['0']['nama'].'.pdf');
+$pdf->Output('D',$dataPasien['nama'].'.pdf');
 }
 
 
@@ -446,34 +449,34 @@ public function getPDFRecord(){
     $pdf->SetFont('Arial','',12);
     $pdf->Cell(5,7,' ',0,0);
     $pdf->Cell(35,7,'Nama ',0,0);
-    $pdf->Cell(60,7,': '.$dataPasien['0']['nama'],0,0);
+    $pdf->Cell(60,7,': '.$dataPasien['nama'],0,0);
     $pdf->Cell(30,7,'NIK ',0,0);
-    $pdf->Cell(60,7,': '.$dataPasien['0']['NIK'],0,1);
+    $pdf->Cell(60,7,': '.$dataPasien['NIK'],0,1);
     $pdf->Cell(5,7,' ',0,0);
     $pdf->Cell(35,7,'Tempat Lahir ',0,0);
-    $pdf->Cell(60,7,': '.$dataPasien['0']['tempat_lahir'],0,0);
+    $pdf->Cell(60,7,': '.$dataPasien['tempat_lahir'],0,0);
     $pdf->Cell(30,7,'Tanggal Lahir ',0,0);
-    $pdf->Cell(60,7,': '.$dataPasien['0']['tanggal_lahir'],0,1);
+    $pdf->Cell(60,7,': '.$dataPasien['tanggal_lahir'],0,1);
     $pdf->Cell(5,7,' ',0,0);
     $pdf->Cell(35,7,'Usia ',0,0);
-    $pdf->Cell(60,7,': '.$this->getAge($dataPasien['0']['tanggal_lahir']),0,1);
+    $pdf->Cell(60,7,': '.$this->getAge($dataPasien['tanggal_lahir']),0,1);
     $pdf->Cell(5,7,' ',0,0);
     $pdf->Cell(35,7,'Email ',0,0);
-    $pdf->Cell(60,7,': '.$dataPasien['0']['email'],0,0);
+    $pdf->Cell(60,7,': '.$dataPasien['email'],0,0);
     $pdf->Cell(30,7,'Nomor HP',0,0);
-    $pdf->Cell(60,7,': '.$dataPasien['0']['nomorhp'],0,1);
+    $pdf->Cell(60,7,': '.$dataPasien['nomorhp'],0,1);
     $pdf->Cell(5,7,' ',0,0);
     $pdf->Cell(35,7,'Jenis Kelamin ',0,0);
-    $pdf->Cell(60,7,': '.($dataPasien['0']['jenis_kelamin'] == 'P' ? 'Perempuan' : 'Laki-laki'),0,0);
+    $pdf->Cell(60,7,': '.($dataPasien['jenis_kelamin'] == 'P' ? 'Perempuan' : 'Laki-laki'),0,0);
     $pdf->Cell(30,7,'Hamil/Pasca',0,0);
-    $pdf->Cell(60,7,': '.($dataPasien['0']['pasca_hamil'] == 'Ya' ? 'Ya' : '-'),0,1);    
+    $pdf->Cell(60,7,': '.($dataPasien['pasca_hamil'] == 'Ya' ? 'Ya' : '-'),0,1);    
     $pdf->Cell(5,7,' ',0,0);
     $pdf->Cell(35,7,'Alamat ',0,0);
     $pdf->Cell(3,7,':',0,0);
-    $pdf->MultiCell( 115, 7,$dataPasien['0']['alamat']."\n".$dataPasien['0']['nama_kel'].', '.$dataPasien['0']['nama_kec'].', '.$dataPasien['0']['nama_kab'], 0,1);
+    $pdf->MultiCell( 115, 7,$dataPasien['alamat']."\n".$dataPasien['nama_kel'].', '.$dataPasien['nama_kec'].', '.$dataPasien['nama_kab'], 0,1);
     $pdf->Cell(5,7,' ',0,0);
     $pdf->Cell(35,7,'Nama KRT ',0,0);
-    $pdf->Cell(60,7,': '.$dataPasien['0']['nama_krt'],0,1);
+    $pdf->Cell(60,7,': '.$dataPasien['nama_krt'],0,1);
 
     $pdf->Cell(50,7,' ',0,1);
     $pdf->SetFont('Arial','B',12);
@@ -749,7 +752,7 @@ public function getPDFRecord(){
     $pdf->Ln($h-7);
     }
 
-  $pdf->Output('D',$dataPasien['0']['nama'].'.pdf');
+  $pdf->Output('D',$dataPasien['nama'].'.pdf');
 }
 
  }

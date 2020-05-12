@@ -131,7 +131,7 @@
     <div class="col-lg-12">
       <div class="ibox">
         <div class="ibox-content">
-          <h5>Hasil Rekam Medis</h5>
+          <h5>Hasil Laboratorium</h5>
           <div class="form-row">
             
             
@@ -918,7 +918,7 @@ function lock_record(){
       btnUpdate.hide();
       btnSend.hide();
       lock_record()
-      info.pdf.html(`<a style="width: 20%" class="btn btn-success my-3 mr-sm-3"  href="<?=site_url("PdfController/getPDFRecordRS/")?>?id_record=${id_record}"><i class='fa fa-download'></i> Hasil Rekam Medis </a> <a style="width: 20%" class="btn btn-success my-3 mr-sm-3"  href="<?=site_url("WordController/getSKRS/")?>?id_record=${id_record}"><i class='fa fa-download'></i> Surat Keterangan </a>`);
+      info.pdf.html(`<a style="width: 20%" class="btn btn-success my-3 mr-sm-3"  href="<?=site_url("PdfController/getPDFRecordRS/")?>?id_record=${id_record}"><i class='fa fa-download'></i> Hasil Laboratorium </a> <a style="width: 20%" class="btn btn-success my-3 mr-sm-3"  href="<?=site_url("WordController/getSKRS/")?>?id_record=${id_record}"><i class='fa fa-download'></i> Surat Keterangan </a>`);
      }
      if(sessionData['id_role'] == '3'){
       btnUpdate.hide();
@@ -950,7 +950,7 @@ function lock_record(){
     info.jenis_kelamin.val(dataPasien['jenis_kelamin']);
     info.usia.val(getAge(dataPasien['tanggal_lahir']));
     info.hamil.val(dataPasien['pasca_hamil'] == 'Ya' ? 'Ya' : '');
-    info.alamat.val(dataPasien['alamat']+'\n'+dataPasien['nama_kel']+', '+dataPasien['nama_kec']+', '+dataPasien['nama_kab']);
+    info.alamat.val(dataPasien['alamat']+'\n'+dataPasien['nama_kel']+', '+dataPasien['nama_kec']+', \n'+dataPasien['nama_kab']+', '+dataPasien['nama_prov']);
     info.nomorhp.val(dataPasien['nomorhp']);
     info.nik.val(dataPasien['NIK']);
     info.nama_kepala_keluarga.val(dataPasien['nama_krt']);
@@ -1293,14 +1293,15 @@ function getAge(date) {
 
   function getPasien(idPasien){
     return $.ajax({
-        url: `<?php echo site_url('DinkesController/getAllPasien_v2/')?>`, 'type': 'GET',
+        url: `<?php echo site_url('DinkesController/getAllPasienProv/')?>`, 'type': 'GET',
        data : {id_pasien: idPasien},
       success: function (data){
         var json = JSON.parse(data);
         if(json['error']){
           return;
         }
-        dataPasien = json['data']['0'];
+        dataPasien = json['data'][idPasien];
+    
         renderRecord(dataRecord);
         getAllRecord(dataPasien['id_pasien']);
         getAllTracking(dataPasien['id_pasien']);

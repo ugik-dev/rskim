@@ -8,6 +8,48 @@ class SharedController extends CI_Controller {
 		$this->load->model(array('SharedModel'));
 		$this->load->helper(array('DataStructure', 'Validation'));
   }
+  
+  public function getAllProv(){
+	try{
+		// $this->SecurityModel->userOnlyGuard(FALSE);
+		  $data = $this->SharedModel->getAllProv($this->input->post());
+		echo json_encode(array("data" => $data));
+	} catch (Exception $e) {
+		ExceptionHandler::handle($e);
+	}
+}
+
+  public function getAllKabProv(){
+	try{
+		// $this->SecurityModel->userOnlyGuard(FALSE);
+		  $data = $this->SharedModel->getAllKabProv($this->input->post());
+		echo json_encode(array("data" => $data));
+	} catch (Exception $e) {
+		ExceptionHandler::handle($e);
+	}
+}
+
+
+public function getAllKecProv(){
+	try{
+		// $this->SecurityModel->userOnlyGuard(TRUE);
+		  $data = $this->SharedModel->getAllKecProv($this->input->post());
+		echo json_encode(array("data" => $data));
+	} catch (Exception $e) {
+		ExceptionHandler::handle($e);
+	}
+}
+
+public function getAllKelProv(){
+	try{
+		// $this->SecurityModel->userOnlyGuard(TRUE);
+		  $data = $this->SharedModel->getAllKelProv($this->input->post());
+		echo json_encode(array("data" => $data));
+	} catch (Exception $e) {
+		ExceptionHandler::handle($e);
+	}
+}
+
 
 	public function getAllKab(){
 		try{

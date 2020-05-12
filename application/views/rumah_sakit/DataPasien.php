@@ -14,6 +14,8 @@
   <div class="ibox ssection-container">
     <div class="ibox-content">
       <form class="form-inline" id="toolbar_form" onsubmit="return false;">
+      <select class="form-control mr-sm-2" name="kd_prov" id="kd_prov"></select>
+   
         <select class="form-control mr-sm-2" name="kd_kab" id="kd_kab"></select>
         <select class="form-control mr-sm-2" name="kd_kec" id="kd_kec"></select>
         <select class="form-control mr-sm-2" name="kd_kel" id="kd_kel"></select>
@@ -200,6 +202,11 @@
             <label for="alamat">Alamat</label> 
             <textarea rows="4" type="text" placeholder="Alamat" class="form-control" id="alamat" name="alamat" required="required"></textarea>
                </div>
+               <div class="form-group">
+            <label for="terdata">Provinsi</label> 
+            <select class="form-control mr-sm-2" id="sl_prov" name="KDPROV" required="required">
+            </select>
+          </div>
           <div class="form-group">
             <label for="terdata">Kabupaten / Kota</label> 
             <select class="form-control mr-sm-2" id="sl_kab" name="KDKAB" required="required">
@@ -215,6 +222,8 @@
             <select class="form-control mr-sm-2" id="sl_kel" name="KDKEL" required="required">
             </select>
           </div>
+          <input hidden type="text" class="form-control" id="kode_wilayah" name="kode_wilayah" placeholder="Status Perkawinan" required="required" autocomplete="">
+         
           <button class="btn btn-success my-1 mr-sm-2" type="submit" id="add_btn" data-loading-text="Loading..." onclick="this.form.target='add'"><strong>Tambah Data</strong></button>
           <button class="btn btn-success my-1 mr-sm-2" type="submit" id="save_edit_btn" data-loading-text="Loading..." onclick="this.form.target='edit'"><strong>Simpan Perubahan</strong></button>
           </form>             
@@ -282,6 +291,8 @@ $(document).ready(function() {
     'showBtn': $('#show_btn'),
     'addBtn': $('#show_btn'),
     'kd_kab': $('#toolbar_form').find('#kd_kab'),
+    'kd_prov': $('#toolbar_form').find('#kd_prov'),
+   
     'kd_kec': $('#toolbar_form').find('#kd_kec'),
     'kd_kel': $('#toolbar_form').find('#kd_kel'),
     'sta_pkh': $('#toolbar_form').find('#sta_pkh'),
@@ -324,9 +335,10 @@ $(document).ready(function() {
     'id_status': $('#pasien_modal').find('#id_status'),
     'sl_puskesmas': $('#pasien_modal').find('#sl_puskesmas'),
     'sl_kab': $('#pasien_modal').find('#sl_kab'),
- 
+    'sl_prov': $('#pasien_modal').find('#sl_prov'),
     'sl_kec': $('#pasien_modal').find('#sl_kec'),
     'sl_kel': $('#pasien_modal').find('#sl_kel'),
+    'kode_wilayah': $('#pasien_modal').find('#kode_wilayah'),
     'nik': $('#pasien_modal').find('#nik'),
     'email': $('#pasien_modal').find('#email'),
     'nomorhp': $('#pasien_modal').find('#nomorhp'),
@@ -373,10 +385,10 @@ $(document).ready(function() {
         break;
     }
   });
-  getAllKab();
-  function getAllKab(){
+  getAllProv();
+  function getAllProv(){
     return $.ajax({
-      url: `<?php echo site_url('SharedController/getAllKab/')?>`, 'type': 'POST',
+      url: `<?php echo site_url('SharedController/getAllProv/')?>`, 'type': 'POST',
       data: {},
       success: function (data){
         var json = JSON.parse(data);
@@ -384,8 +396,25 @@ $(document).ready(function() {
           return;
         }
         dataRole = json['data'];
+        renderProvSelectionFilter(dataRole);
+        renderProvOptionFilter(dataRole);
+      },
+      error: function(e) {}
+    });
+  }
+
+  function getAllKab(){
+    return $.ajax({
+      url: `<?php echo site_url('SharedController/getAllKabProv/')?>`, 'type': 'POST',
+      data: toolbar.form.serialize(),
+      success: function (data){
+        var json = JSON.parse(data);
+        if(json['error']){
+          return;
+        }
+        dataRole = json['data'];
         renderKabSelectionFilter(dataRole);
-        renderKabOptionFilter(dataRole);
+        
       },
       error: function(e) {}
     });
@@ -402,7 +431,7 @@ $(document).ready(function() {
           return;
         }
         dataRole = json['data'];
-        // renderKabSelectionFilter(dataRole);
+    
           renderPuskesmas(dataRole);
       },
       error: function(e) {}
@@ -411,7 +440,7 @@ $(document).ready(function() {
 
   function getAllKec(){
     return $.ajax({
-      url: `<?php echo site_url('SharedController/getAllKec/')?>`, 'type': 'POST',
+      url: `<?php echo site_url('SharedController/getAllKecProv/')?>`, 'type': 'POST',
       data: toolbar.form.serialize(),
       success: function (data){
         var json = JSON.parse(data);
@@ -427,7 +456,7 @@ $(document).ready(function() {
 
   function getAllKel(){
     return $.ajax({
-      url: `<?php echo site_url('SharedController/getAllKel/')?>`, 'type': 'POST',
+      url: `<?php echo site_url('SharedController/getAllKelProv/')?>`, 'type': 'POST',
       data: toolbar.form.serialize(),
       success: function (data){
         var json = JSON.parse(data);
@@ -440,11 +469,28 @@ $(document).ready(function() {
       error: function(e) {}
     });
   }
+  function getAllKabOption(){
+    kd_prov = PasienModal.sl_prov.val();
+     $.ajax({
+      url: `<?php echo site_url('SharedController/getAllKabProv/')?>`, 'type': 'POST',
+      data: {kd_prov : kd_prov},
+      success: function (data){
+        var json = JSON.parse(data);
+        if(json['error']){
+          return;
+        }
+        dataRole = json['data'];
+        renderKabOptionFilter(dataRole);
+        return;
+      },
+      error: function(e) {}
+    });
+  }
 
   function getAllKecOption(){
     kd_kab = PasienModal.sl_kab.val();
      $.ajax({
-      url: `<?php echo site_url('SharedController/getAllKec/')?>`, 'type': 'POST',
+      url: `<?php echo site_url('SharedController/getAllKecProv/')?>`, 'type': 'POST',
       data: {kd_kab : kd_kab},
       success: function (data){
         var json = JSON.parse(data);
@@ -463,7 +509,7 @@ $(document).ready(function() {
     kd_kec = PasienModal.sl_kec.val();
     kd_kab = PasienModal.sl_kab.val();
     return $.ajax({
-      url: `<?php echo site_url('SharedController/getAllKel/')?>`, 'type': 'POST',
+      url: `<?php echo site_url('SharedController/getAllKelProv/')?>`, 'type': 'POST',
       data: {kd_kec : kd_kec, kd_kab : kd_kab},
       success: function (data){
         var json = JSON.parse(data);
@@ -485,6 +531,7 @@ $(document).ready(function() {
     toolbar.kd_kab.val(null);
     toolbar.kd_kec.val(null);
     toolbar.kd_kel.val(null);
+    toolbar.kd_kab.empty();
     toolbar.kd_kec.empty();
     toolbar.kd_kel.empty();
   }
@@ -496,6 +543,15 @@ $(document).ready(function() {
           PasienModal.sl_hamil.prop('disabled',true)     
       }
     });
+  toolbar.kd_prov.on('change', (e) => {
+    if(toolbar.kd_kab.val() != ''){
+      getAllKab()
+      toolbar.kd_kab.empty();
+    }else{
+      reset_toolbar()
+    }
+ 
+  });
   toolbar.kd_kab.on('change', (e) => {
     if(toolbar.kd_kab.val() != ''){
       getAllKec()
@@ -525,6 +581,25 @@ $(document).ready(function() {
     getPasien()
   });
   
+  PasienModal.sl_prov.on('change', (e) => {
+    if(PasienModal.sl_prov.val() != ''){
+      PasienModal.sl_kab.empty();
+    PasienModal.sl_kec.empty();
+    PasienModal.sl_kel.empty();
+    PasienModal.sl_kab.val(null);
+    PasienModal.sl_kec.val(null);
+    PasienModal.sl_kel.val(null);
+      getAllKabOption()
+    }else{
+      PasienModal.sl_kab.empty();
+    PasienModal.sl_kec.empty();
+    PasienModal.sl_kel.empty();
+    PasienModal.sl_kab.val(null);
+    PasienModal.sl_kec.val(null);
+    PasienModal.sl_kel.val(null);
+    }
+  });
+
   PasienModal.sl_kab.on('change', (e) => {
     if(PasienModal.sl_kab.val() != ''){
     PasienModal.sl_kec.empty();
@@ -548,6 +623,11 @@ $(document).ready(function() {
     PasienModal.sl_kel.empty();
     PasienModal.sl_kel.val(null);
     }
+  });
+  PasienModal.sl_kel.on('change', (e) => {
+    
+    PasienModal.kode_wilayah.val(PasienModal.sl_kel.val());
+   
   });
 
   // renderStaSelectionFilter();
@@ -582,8 +662,22 @@ $(document).ready(function() {
 
     Object.values(data).forEach((d) => {
       toolbar.kd_kab.append($('<option>', {
-        value: d['id_kd_kab'],
-        text:  d['nama_kab'],
+        value: d['kode'],
+        text:  d['nama'],
+        // text: d['id_kd_kab'] + ' :: ' + d['nama_kab'],
+    
+      }));
+    });  
+  }
+
+  function renderProvSelectionFilter(data){
+    toolbar.kd_prov.empty();
+    toolbar.kd_prov.append($('<option>', { value: "", text: "Semua Provinsi"}));
+
+    Object.values(data).forEach((d) => {
+      toolbar.kd_prov.append($('<option>', {
+        value: d['kode'],
+        text:  d['nama'],
         // text: d['id_kd_kab'] + ' :: ' + d['nama_kab'],
     
       }));
@@ -595,8 +689,8 @@ $(document).ready(function() {
     toolbar.kd_kec.append($('<option>', { value: "", text: "Semua Kecamatan"}));
     Object.values(data).forEach((d) => {
       toolbar.kd_kec.append($('<option>', {
-        value: d['KodeKec'],
-        text:  d['Kecamatan'],
+        value: d['kode'],
+        text:  d['nama'],
         // text: d['id_kd_kab'] + ' :: ' + d['nama_kab'],
       }));
     });
@@ -607,45 +701,62 @@ $(document).ready(function() {
     toolbar.kd_kel.append($('<option>', { value: "", text: "Semua Kelurahan"}));
     Object.values(data).forEach((d) => {
       toolbar.kd_kel.append($('<option>', {
-        value: d['KodeKel'],
-        text:  d['Kelurahan'],
+        value: d['kode'],
+        text:  d['nama'],
       }));
     });
   }
+  function renderProvOptionFilter(data){
+
+      PasienModal.sl_kelamin.append($('<option>', { value: "", text: "-- Pilih Jenis Kelamin"}));
+      PasienModal.sl_kelamin.append($('<option>', { value: "L", text: "Laki-laki"}));
+      PasienModal.sl_kelamin.append($('<option>', { value: "P", text: "Perempuan"}));
+
+      PasienModal.sl_kategori.append($('<option>', { value: "", text: "-- Pilih Kategori --"}));
+      PasienModal.sl_kategori.append($('<option>', { value: "1", text: "Pasien Mandiri"}));
+      PasienModal.sl_kategori.append($('<option>', { value: "2", text: "Pasien Asuransi / Perusahaan"}));
+      PasienModal.sl_kategori.append($('<option>', { value: "3", text: "Pasien SATGAS"}));
+
+      PasienModal.sl_kewarganegaraan.append($('<option>', { value: "", text: "-- Pilih Kewarganegaraan --"}));
+      PasienModal.sl_kewarganegaraan.append($('<option>', { value: "WNI", text: "Warga Negara Indonesia"}));
+      PasienModal.sl_kewarganegaraan.append($('<option>', { value: "WNA", text: "Warga Negara Asing"}));
+
+      PasienModal.sl_hamil.append($('<option>', { value: "", text: ""}));
+      PasienModal.sl_hamil.append($('<option>', { value: "Ya", text: "Ya"}));
+      PasienModal.sl_hamil.append($('<option>', { value: "Tidak", text: "Tidak"}));
+
+
+      PasienModal.sl_prov.empty();
+      PasienModal.sl_prov.append($('<option>', { value: "", text: "-- Pilih Provinsi --"}));
+
+      Object.values(data).forEach((d) => {
+        PasienModal.sl_prov.append($('<option>', {
+          value: d['kode'],
+          text:  d['nama'],
+          // text: d['id_kd_kab'] + ' :: ' + d['nama_kab'],
+
+        }));
+      });
+      if(GlobalTemp != undefined){
+        PasienModal.sl_kab.val(GlobalTemp['KDKAB']).trigger('change')
+      }
+}
 
   function renderKabOptionFilter(data){
-
-    PasienModal.sl_kelamin.append($('<option>', { value: "", text: "-- Pilih Jenis Kelamin"}));
-    PasienModal.sl_kelamin.append($('<option>', { value: "L", text: "Laki-laki"}));
-    PasienModal.sl_kelamin.append($('<option>', { value: "P", text: "Perempuan"}));
-
-    PasienModal.sl_kategori.append($('<option>', { value: "", text: "-- Pilih Kategori --"}));
-    PasienModal.sl_kategori.append($('<option>', { value: "1", text: "Pasien Mandiri"}));
-    PasienModal.sl_kategori.append($('<option>', { value: "2", text: "Pasien Asuransi / Perusahaan"}));
-    PasienModal.sl_kategori.append($('<option>', { value: "3", text: "Pasien SATGAS"}));
-
-    PasienModal.sl_kewarganegaraan.append($('<option>', { value: "", text: "-- Pilih Kewarganegaraan --"}));
-    PasienModal.sl_kewarganegaraan.append($('<option>', { value: "WNI", text: "Warga Negara Indonesia"}));
-    PasienModal.sl_kewarganegaraan.append($('<option>', { value: "WNA", text: "Warga Negara Asing"}));
-    
-    PasienModal.sl_hamil.append($('<option>', { value: "", text: ""}));
-    PasienModal.sl_hamil.append($('<option>', { value: "Ya", text: "Ya"}));
-    PasienModal.sl_hamil.append($('<option>', { value: "Tidak", text: "Tidak"}));
-
 
     PasienModal.sl_kab.empty();
     PasienModal.sl_kab.append($('<option>', { value: "", text: "-- Pilih Kabupaten --"}));
 
     Object.values(data).forEach((d) => {
       PasienModal.sl_kab.append($('<option>', {
-        value: d['id_kd_kab'],
-        text:  d['nama_kab'],
+        value: d['kode'],
+        text:  d['nama'],
         // text: d['id_kd_kab'] + ' :: ' + d['nama_kab'],
     
       }));
     });
     if(GlobalTemp != undefined){
-      PasienModal.sl_kab.val(GlobalTemp['KDKAB']).trigger('change')
+      PasienModal.sl_kab.val(GlobalTemp[0]+'.'+GlobalTemp[1]).trigger('change')
     }
   }
 
@@ -654,14 +765,14 @@ $(document).ready(function() {
     PasienModal.sl_kec.append($('<option>', { value: "", text: "-- Pilih Kecamatan --"}));
     Object.values(data).forEach((d) => {
       PasienModal.sl_kec.append($('<option>', {
-        value: d['KodeKec'],
-        text:  d['Kecamatan'],
+        value: d['kode'],
+        text:  d['nama'],
         // text: d['id_kd_kab'] + ' :: ' + d['nama_kab'],
       }));
     });
 
     if(GlobalTemp != undefined){
-      PasienModal.sl_kec.val(GlobalTemp['KDKEC']).trigger('change')
+      PasienModal.sl_kec.val(GlobalTemp[0]+'.'+GlobalTemp[1]+'.'+GlobalTemp[2]).trigger('change')
     }
   }
 
@@ -670,12 +781,12 @@ $(document).ready(function() {
     PasienModal.sl_kel.append($('<option>', { value: "", text: "-- Pilih Kelurahan --"}));
     Object.values(data).forEach((d) => {
       PasienModal.sl_kel.append($('<option>', {
-        value: d['KodeKel'],
-        text:  d['Kelurahan'],
+        value: d['kode'],
+        text:  d['nama'],
       }));
     });
     if(GlobalTemp != undefined){
-      PasienModal.sl_kel.val(GlobalTemp['KDKEL'])
+      PasienModal.sl_kel.val(GlobalTemp[0]+'.'+GlobalTemp[1]+'.'+GlobalTemp[2]+'.'+GlobalTemp[3])
     }
   }
 
@@ -712,7 +823,7 @@ $(document).ready(function() {
   function getPasien(){
     buttonLoading(toolbar.showBtn);
     $.ajax({
-      url: `<?=site_url('DinkesController/getAllPasien')?>`, 'type': 'GET',
+      url: `<?=site_url('DinkesController/getAllPasienProv')?>`, 'type': 'GET',
       data: toolbar.form.serialize(),
       success: function (data){
         buttonIdle(toolbar.showBtn);
@@ -754,7 +865,7 @@ $(document).ready(function() {
           </div>
         </div>
       `;
-      renderData.push([pasien['nama'],pasien['NIK'],pasien['nama_kab']+'<br>'+pasien['nama_kec']+'<br>'+pasien['nama_kel'], button]);
+      renderData.push([pasien['nama'],pasien['NIK'],pasien['nama_prov']+'<br>'+pasien['nama_kab']+'<br>'+pasien['nama_kec']+'<br>'+pasien['nama_kel'], button]);
     });
     FDataTable.clear().rows.add(renderData).draw('full-hold');
   }
@@ -820,11 +931,12 @@ $(document).ready(function() {
     PasienModal.id_status.val(pasien['status']);
     PasienModal.id_user.val(pasien['id_user']);
   
-    PasienModal.sl_kab.val(pasien['KDKAB']).trigger('change');
-    GlobalTemp = pasien;
-    console.log(GlobalTemp)
+    GlobalTemp = pasien['kode_wilayah'].split(".");
+    PasienModal.sl_prov.val(GlobalTemp[0]).trigger('change');
+  
     // PasienModal.sl_kec.val(pasien['KDKEC']).trigger('change');
-
+    PasienModal.kode_wilayah.val(pasien['kode_wilayah']);
+ 
     PasienModal.NIK.val(pasien['NIK']);
     PasienModal.username.val(pasien['username']);
     PasienModal.email.val(pasien['email']);

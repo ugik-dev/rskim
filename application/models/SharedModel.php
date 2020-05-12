@@ -3,7 +3,44 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class SharedModel extends CI_Model {
  
-  
+  public function getAllProv($filter = []){
+    $this->db->select('*');
+    $this->db->from('wilayah_2020');
+    $this->db->where("(length(kode )-length(replace(kode ,'.',''))) = 0");
+    $res = $this->db->get();
+    return DataStructure::keyValue($res->result_array(), 'kode');
+  }
+
+  public function getAllKabProv($filter = []){
+    $this->db->select('*');
+    $this->db->from('wilayah_2020');
+    $this->db->where("(length(kode )-length(replace(kode ,'.',''))) = 1");
+    $this->db->where("SUBSTRING_INDEX(kode, '.', 1) = " ,$filter['kd_prov']);
+    if(!empty($filter['kd_kab'])) $this->db->where("SUBSTRING_INDEX(kode, '.', 2) = ", $filter['kd_kab']);
+    $res = $this->db->get();
+    return DataStructure::keyValue($res->result_array(), 'kode');
+  }
+
+  public function getAllKecProv($filter = []){
+    $this->db->select('*');
+    $this->db->from('wilayah_2020');
+    $this->db->where("(length(kode )-length(replace(kode ,'.',''))) = 2");
+    $this->db->where("SUBSTRING_INDEX(kode, '.', 2) = " ,$filter['kd_kab']);
+    // if(!empty($filter['kd_kab'])) $this->db->where("SUBSTRING_INDEX(kode, '.', 2) = ", $filter['kd_kab']);
+    $res = $this->db->get();
+    return DataStructure::keyValue($res->result_array(), 'kode');
+  }
+
+  public function getAllKelProv($filter = []){
+    $this->db->select('*');
+    $this->db->from('wilayah_2020');
+    $this->db->where("(length(kode )-length(replace(kode ,'.',''))) = 3");
+    $this->db->where("SUBSTRING_INDEX(kode, '.', 3) = " ,$filter['kd_kec']);
+    // if(!empty($filter['kd_kab'])) $this->db->where("SUBSTRING_INDEX(kode, '.', 2) = ", $filter['kd_kab']);
+    $res = $this->db->get();
+    return DataStructure::keyValue($res->result_array(), 'kode');
+  }
+
   public function getAllKab($filter = []){
     $this->db->select('*');
     $this->db->from('kd_kab');

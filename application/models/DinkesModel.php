@@ -8,6 +8,40 @@ class DinkesModel extends CI_Model {
     $this->CI =& get_instance();
     $this->CI->load->library('form_validation');
     }
+
+    public function getAllPasienProv($filter){
+      if(!empty($this->session->userdata('id_puskesmas'))){
+        if($this->session->userdata('id_puskesmas') != '999')$filter['id_puskesmas'] = $this->session->userdata('id_puskesmas');
+      } 
+      $this->db->select("ssk.*,p.nama_puskesmas ,p.pembayaran , u.username as username , u.id_user as id_user, 
+    (SELECT nama from wilayah_2020 where SUBSTRING_INDEX(kode, '.', 1) = SUBSTRING_INDEX(ssk.kode_wilayah, '.', 1) 
+     and (length(kode )-length(replace(kode ,'.',''))) = 0 limit 1) as nama_prov,
+     (SELECT nama from wilayah_2020 where SUBSTRING_INDEX(kode, '.', 2) = SUBSTRING_INDEX(ssk.kode_wilayah, '.', 2) 
+     and (length(kode )-length(replace(kode ,'.',''))) = 1 limit 1) as nama_kab,
+     (SELECT nama from wilayah_2020 where SUBSTRING_INDEX(kode, '.', 3) = SUBSTRING_INDEX(ssk.kode_wilayah, '.', 3) 
+     and (length(kode )-length(replace(kode ,'.',''))) = 2 limit 1)  as nama_kec, 
+     (SELECT nama from wilayah_2020 where SUBSTRING_INDEX(kode, '.', 4) = SUBSTRING_INDEX(ssk.kode_wilayah, '.', 4) 
+     and (length(kode )-length(replace(kode ,'.',''))) = 3 limit 1)  as nama_kel");
+      $this->db->from("data_pasien as ssk");
+      $this->db->join('user as u',"ssk.id_pasien = u.id_sub",'LEFT');
+      $this->db->join('puskesmas as p',"ssk.id_puskesmas = p.id_puskesmas",'LEFT');
+      $this->db->join("kd_area_v2 as ks", "ks.KodeKab = ssk.KDKAB AND ks.KodeKec = ssk.KDKEC AND ks.KodeKel = ssk.KDKEL", "LEFT");
+      // $idSub = $this->session->userdata('id_sub');
+      // if(!empty($filter['id_pasien'])) $this->db->where("ssk.id_pasien", $filter['id_pasien']);
+      if(!empty($filter['id_pasien'])) $this->db->where("ssk.id_pasien", $filter['id_pasien']);
+      if(!empty($filter['id_puskesmas'])) $this->db->where("ssk.id_puskesmas", $filter['id_puskesmas']);
+      if(!empty($filter['kd_prov'])) $this->db->where("SUBSTRING_INDEX(ssk.kode_wilayah, '.', 1) = ", $filter['kd_prov']);
+  
+      if(!empty($filter['kd_kab'])) $this->db->where("SUBSTRING_INDEX(ssk.kode_wilayah, '.', 2) =", $filter['kd_kab']);
+      if(!empty($filter['kd_kec'])) $this->db->where("SUBSTRING_INDEX(ssk.kode_wilayah, '.', 3) =" , $filter['kd_kec']);
+      if(!empty($filter['kd_kel'])) $this->db->where("SUBSTRING_INDEX(ssk.kode_wilayah, '.', 4) =", $filter['kd_kel']);
+      if(!empty($filter['by_nik'])) $this->db->where("ssk.NIK", $filter['by_nik']);
+      //  $this->db->GROUP_BY("ssk.NoKK");
+        $this->db->limit("1000");
+      $res = $this->db->get();
+      return DataStructure::keyValue($res->result_array(), 'id_pasien');
+     
+    }
     
     public function getAllPasien($filter){
       if(!empty($this->session->userdata('id_puskesmas'))){
@@ -108,9 +142,9 @@ class DinkesModel extends CI_Model {
     }
 
     public function addPasien($data){
-      // $data['status'] = $data['status'];
+ 
       $this->db->insert('data_pasien', DataStructure::slice($data, [
-        'nama', 'NIK', 'KDKAB', 'KDKEC', 'KDKEL', 'status', 'email', 'nomorhp', 'alamat', 'jenis_kelamin', 'tempat_lahir', 'pasca_hamil',  'nama_krt', 'tanggal_lahir'
+        'nama', 'NIK', 'KDKAB', 'KDKEC', 'KDKEL', 'status', 'email', 'nomorhp', 'alamat', 'jenis_kelamin', 'tempat_lahir', 'pasca_hamil',  'nama_krt', 'tanggal_lahir','kode_wilayah'
       ], TRUE));
       ExceptionHandler::handleDBError($this->db->error(), "Tambah Data Pasien", "data_pasien");
   
@@ -145,7 +179,7 @@ class DinkesModel extends CI_Model {
            'status', 'email', 'nomorhp', 'alamat',
             'jenis_kelamin','pasca_hamil',  'nama_krt', 
              'tempat_lahir',  'id_puskesmas', 
-             'tanggal_lahir','kewarganegaraan','kategori','st_perkawinan','pekerjaan'
+             'tanggal_lahir','kewarganegaraan','kategori','st_perkawinan','pekerjaan','kode_wilayah'
           ], TRUE));
         
   

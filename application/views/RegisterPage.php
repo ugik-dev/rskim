@@ -101,6 +101,11 @@
             <textarea rows="4" type="text" placeholder="Alamat" class="form-control" id="alamat" name="alamat" required="required"></textarea>
                </div>
           <div class="form-group">
+            <label for="terdata">Provinsi</label> 
+            <select class="form-control mr-sm-2" id="sl_prov" name="KDPROV" required="required">
+            </select>
+          </div>
+          <div class="form-group">
             <label for="terdata">Kabupaten / Kota</label> 
             <select class="form-control mr-sm-2" id="sl_kab" name="KDKAB" required="required">
             </select>
@@ -115,6 +120,8 @@
             <select class="form-control mr-sm-2" id="sl_kel" name="KDKEL" required="required">
             </select>
           </div>
+          <input hidden type="text" class="form-control" id='kode_wilayah' name="kode_wilayah" placeholder="Status Perkawinan" >
+         
           <button type="submit" id="registerBtn" class="btn btn-primary block full-width m-b" data-loading-text="Register In..." >REGISTRASI</button>   
         </form> 
         
@@ -150,6 +157,7 @@
 
     Pass = registerForm.find('#password');
     RePass = registerForm.find('#repassword');
+    Prov = registerForm.find('#sl_prov');
     Kab = registerForm.find('#sl_kab');
     Kec = registerForm.find('#sl_kec');
     Kel = registerForm.find('#sl_kel');
@@ -157,10 +165,23 @@
     sl_kewarganegaraan = registerForm.find('#sl_kewarganegaraan');
     sl_perkawinan = registerForm.find('#sl_perkawinan');
     sl_hamil = registerForm.find('#sl_hamil');
-  
+    kode_wilayah = registerForm.find('#kode_wilayah');
     sl_kategori = registerForm.find('#sl_kategori');
     tanggal_lahir = registerForm.find('#tanggal_lahir');
     JenisKelamin = registerForm.find('#sl_kelamin');
+    Prov.on('change', (e) => {
+      if(Prov.val() != ''){
+        Kab.empty();
+        Kec.empty();
+        Kel.empty();
+        getAllKab()
+      }else{
+        Kab.empty();
+        Kec.empty();
+        Kel.empty();
+      }  
+    });
+
     Kab.on('change', (e) => {
       if(Kab.val() != ''){
         Kec.empty();
@@ -187,6 +208,10 @@
       }else{
         Kel.empty();
       }
+    });
+
+    Kel.on('change', (e) => {
+      kode_wilayah.val(Kel.val());
     });
     var swalRegisConfigure = {
     title: "Konfirmasi Registrasi",
@@ -260,11 +285,28 @@
       });
     });
   });
-  getAllKab();
-  function getAllKab(){
+  getAllProv();
+  function getAllProv(){
     return $.ajax({
-      url: `<?php echo site_url('SharedController/getAllKab/')?>`, 'type': 'POST',
+      url: `<?php echo site_url('SharedController/getAllProv/')?>`, 'type': 'POST',
       data: {},
+      success: function (data){
+        var json = JSON.parse(data);
+        if(json['error']){
+          return;
+        }
+        dataRole = json['data'];
+        // renderKabSelectionFilter(dataRole);
+        renderProvOptionFilter(dataRole);
+      },
+      error: function(e) {}
+    });
+  }
+  function getAllKab(){
+    var prov = Prov.val();
+    return $.ajax({
+      url: `<?php echo site_url('SharedController/getAllKabProv/')?>`, 'type': 'POST',
+      data: {kd_prov : prov},
       success: function (data){
         var json = JSON.parse(data);
         if(json['error']){
@@ -280,10 +322,11 @@
 
   function getAllKec(){
     var kab = Kab.val();
+    var prov = Prov.val();
     console.log(kab);
     return $.ajax({
-      url: `<?php echo site_url('SharedController/getAllKec/')?>`, 'type': 'POST',
-      data: {kd_kab : kab},
+      url: `<?php echo site_url('SharedController/getAllKecProv/')?>`, 'type': 'POST',
+      data: {kd_kab : kab,kd_prov : prov},
       success: function (data){
         var json = JSON.parse(data);
         if(json['error']){
@@ -297,10 +340,11 @@
   }
 
   function getAllKel(){
+    var prov = Prov.val();
     var kab = Kab.val();
     var kec = Kec.val();
     return $.ajax({
-      url: `<?php echo site_url('SharedController/getAllKel/')?>`, 'type': 'POST',
+      url: `<?php echo site_url('SharedController/getAllKelProv/')?>`, 'type': 'POST',
       data: {kd_kab : kab, kd_kec : kec},
       success: function (data){
         var json = JSON.parse(data);
@@ -332,8 +376,7 @@
     });
   }
 
-  function renderKabOptionFilter(data){
-    Kab.empty();
+  function renderProvOptionFilter(data){
     JenisKelamin.append($('<option>', { value: "", text: "-- Pilih Jenis Kelamin"}));
     JenisKelamin.append($('<option>', { value: "L", text: "Laki-laki"}));
     JenisKelamin.append($('<option>', { value: "P", text: "Perempuan"}));
@@ -351,12 +394,27 @@
     sl_kewarganegaraan.append($('<option>', { value: "WNI", text: "Warga Negara Indonesia"}));
     sl_kewarganegaraan.append($('<option>', { value: "WNA", text: "Warga Negara Asing"}));
 
+
+    Prov.empty();
+    Prov.append($('<option>', { value: "", text: "-- Pilih Provinsi --"}));
+    Object.values(data).forEach((d) => {
+      Prov.append($('<option>', {
+        value: d['kode'],
+        text:  d['nama'],
+        // text: d['id_kd_kab'] + ' :: ' + d['nama_kab'],
+      }));
+    });
+  }
+
+  function renderKabOptionFilter(data){
+    Kab.empty();
+    
     Kab.append($('<option>', { value: "", text: "-- Pilih Kabupaten --"}));
 
     Object.values(data).forEach((d) => {
       Kab.append($('<option>', {
-        value: d['id_kd_kab'],
-        text:  d['nama_kab'],    
+        value: d['kode'],
+        text:  d['nama'],    
       }));
     });
   }
@@ -374,8 +432,8 @@
     Kec.append($('<option>', { value: "", text: "-- Pilih Kecamatan --"}));
     Object.values(data).forEach((d) => {
       Kec.append($('<option>', {
-        value: d['KodeKec'],
-        text:  d['Kecamatan'],
+        value: d['kode'],
+        text:  d['nama'],
         // text: d['id_kd_kab'] + ' :: ' + d['nama_kab'],
       }));
     });
@@ -400,8 +458,8 @@
     Kel.append($('<option>', { value: "", text: "-- Pilih Kelurahan --"}));
     Object.values(data).forEach((d) => {
       Kel.append($('<option>', {
-        value: d['KodeKel'],
-        text:  d['Kelurahan'],
+        value: d['kode'],
+        text:  d['nama'],
       }));
     });
   }

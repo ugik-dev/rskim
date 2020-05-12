@@ -92,6 +92,16 @@ class DinkesController extends CI_Controller {
     }
   }
 
+  public function getAllPasienProv(){
+    try{
+      $this->SecurityModel->userOnlyGuard(TRUE);
+      $data = $this->DinkesModel->getAllPasienProv($this->input->get());
+			echo json_encode(array("data" => $data));
+    } catch (Exception $e){
+      ExceptionHandler::handle($e);
+    }
+  }
+
   public function getAllTempatSampel(){
     try{
       $this->SecurityModel->userOnlyGuard(TRUE);
@@ -198,7 +208,7 @@ class DinkesController extends CI_Controller {
         $this->email_send($filter,'changepassword');
       }
       $idPasien = $this->DinkesModel->editPasien($filter);
-      $data = $this->DinkesModel->getAllPasien(['id_pasien' => $idPasien]);
+      $data = $this->DinkesModel->getAllPasienProv(['id_pasien' => $idPasien]);
       $data = $data[$idPasien];
 			echo json_encode(array("data" => $data));
 		} catch (Exception $e) {
@@ -321,7 +331,7 @@ class DinkesController extends CI_Controller {
         if($tipe == 'new_jadwal_berbayar'){
           $data_puskes = $this->SharedModel->getAllPuskesmas($data);
           $data_puskes = $data_puskes[$data['id_puskesmas']];
-          $send['subject'] = $subject = 'Pemberitahun Penjadwalan Uji Sampel BABEL PROV Covid - 19';   
+          $send['subject'] = $subject = 'Pemberitahun Penjadwalan & Pembayaran RS Kalbu Intan Mdika';   
           $emailContent = '<!DOCTYPE><html><head></head><body><table width="600px" style="border:1px solid #cccccc;margin: auto;border-spacing:0;"><tr><td style="background:#F00000;padding-left:3%"><img src="http://intanmedika.com/covid19/assets/img/logo-babel.png" width="60px" vspace=0 /></td></tr>';
           $emailContent .='<tr><td style="height:20px"></td></tr>';        
           $emailContent .= '';
@@ -362,7 +372,7 @@ class DinkesController extends CI_Controller {
           $send['message'] = $emailContent;  
     
         }else if ($tipe == 'final_rec'){
-          $send['subject'] = $subject = 'Pemberitahun Hasil Lab';     
+          $send['subject'] = $subject = 'Pemberitahun Hasil Laboratorium RS Kalbu Intan Mdika';     
           $emailContent = '<!DOCTYPE><html><head></head><body><table width="600px" style="border:1px solid #cccccc;margin: auto;border-spacing:0;"><tr><td style="background:#F00000;padding-left:3%"><img src="http://intanmedika.com/covid19/assets/img/logo-babel.png" width="60px" vspace=0 /></td></tr>';
           $emailContent .='<tr><td style="height:20px"></td></tr>';        
           $emailContent .= ' Dengan ini kami menyampaikan bahwa hasil uji sampel Bapak/Ibu sudah keluar dengan :';
@@ -401,7 +411,7 @@ class DinkesController extends CI_Controller {
           $send['message'] = $emailContent;  
   
         }else if ($tipe == 'changepassword'){
-          $send['subject'] = $subject = 'Pemberitahun Informasi Login BABEL PROV Covid - 19';     
+          $send['subject'] = $subject = 'Pemberitahun Informasi Login RS Kalbu Intan Mdika';     
           $emailContent = '<!DOCTYPE><html><head></head><body><table width="600px" style="border:1px solid #cccccc;margin: auto;border-spacing:0;"><tr><td style="background:#F00000;padding-left:3%"><img src="http://intanmedika.com/covid19/assets/img/logo-babel.png" width="60px" vspace=0 /></td></tr>';
           $emailContent .='<tr><td style="height:20px"></td></tr>';        
           $emailContent .= ' Dengan ini kami menyampaikan bahwa data login anda sudah dirubah, dengan data sebagai berikut :';

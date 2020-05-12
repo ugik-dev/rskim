@@ -55,8 +55,8 @@ class WordController extends CI_Controller {
         $get = $this->input->get();
         $data = $this->DinkesModel->getAllRecord($this->input->get());
         $data = $data[$get['id_record']];
-        $dataPasien = $this->DinkesModel->getAllPasien_v2(array('id_pasien' => $data['id_pasien']));
-
+        $dataPasien = $this->DinkesModel->getAllPasienProv(array('id_pasien' => $data['id_pasien']));
+        $dataPasien = $dataPasien[$data['id_pasien']];
         $phpWord = new PhpOffice\PhpWord\PhpWord();
         $phpWord->addFontStyle('h3', array('name' => 'Times New Roman', 'size' => 12, 'color' => '000000', 'bold' => true));
         $phpWord->addFontStyle('paragraph', array('name' => 'Times New Roman', 'size' => 12, 'color' => '000000'));
@@ -77,7 +77,7 @@ class WordController extends CI_Controller {
           
       
         $section->addText('SURAT KETERANGAN', $fontStyleName, $paragraphStyleName);
-        $section->addText('Nomor :        /KIM-RM4/'.($this->converRomawi($no_tanggal[1])).'/2020 ', 'cen_f', $paragraphStyleName);
+        $section->addText('Nomor :        /RSKIM/'.($this->converRomawi($no_tanggal[1])).'/2020 ', 'cen_f', $paragraphStyleName);
   
     
   
@@ -88,17 +88,17 @@ class WordController extends CI_Controller {
         $textrun->addText("Yang bertanda tangan di bawah ini, Dokter ".$data['dokter_nama']." menerangkan dengan sesungguhnya bahwa :", 'paragraph', 'jus_p');
         $textrun->addTextBreak();
         $textrun->addTextBreak();
-        $textrun->addText("\tNama\t\t\t\t: ".$dataPasien['0']['nama'], 'paragraph');
+        $textrun->addText("\tNama\t\t\t\t: ".$dataPasien['nama'], 'paragraph');
         $textrun->addTextBreak();
-        $textrun->addText("\tNIK\t\t\t\t: ".$dataPasien['0']['NIK'],'paragraph', 'jus_p');
+        $textrun->addText("\tNIK\t\t\t\t: ".$dataPasien['NIK'],'paragraph', 'jus_p');
         $textrun->addTextBreak();
-        $textrun->addText("\tTempat/Tanggal Lahir\t: ".$dataPasien['0']['tempat_lahir'].' ,'.( $this->convertDateTime2($dataPasien['0']['tanggal_lahir'],false) ),'paragraph', 'jus_p');
+        $textrun->addText("\tTempat/Tanggal Lahir\t: ".$dataPasien['tempat_lahir'].' ,'.( $this->convertDateTime2($dataPasien['tanggal_lahir'],false) ),'paragraph', 'jus_p');
         $textrun->addTextBreak();
-        $textrun->addText("\tJenis Kelamin\t\t\t: ".($dataPasien['0']['jenis_kelamin'] == 'L' ? 'Laki-laki' : 'Perempuan' ),'paragraph', 'jus_p');
+        $textrun->addText("\tJenis Kelamin\t\t\t: ".($dataPasien['jenis_kelamin'] == 'L' ? 'Laki-laki' : 'Perempuan' ),'paragraph', 'jus_p');
         $textrun->addTextBreak();
-        $textrun->addText("\tPekerjaan\t\t\t: ".$dataPasien['0']['pekerjaan'],'paragraph', 'jus_p');
+        $textrun->addText("\tPekerjaan\t\t\t: ".$dataPasien['pekerjaan'],'paragraph', 'jus_p');
         $textrun->addTextBreak();
-        $textrun->addText("\tAlamat Lengkap\t\t: ".$dataPasien['0']['alamat'].' , '.ucfirst(strtolower($dataPasien['0']['nama_kel'])).' , '.ucfirst(strtolower($dataPasien['0']['nama_kec'])).' , '.ucfirst(strtolower($dataPasien['0']['nama_kab'])),'paragraph', 'jus_p');
+        $textrun->addText("\tAlamat Lengkap\t\t: ".$dataPasien['alamat'].' , '.ucfirst(strtolower($dataPasien['nama_kel'])).' , '.ucfirst(strtolower($dataPasien['nama_kec'])).' , '.ucfirst(strtolower($dataPasien['nama_kab'])).' , '.ucfirst(strtolower($dataPasien['nama_prov'])),'paragraph', 'jus_p');
         $textrun->addTextBreak();
         $textrun->addTextBreak();
         $textrun->addText("Telah kami rapid test Antobody dengan hasil ", 'paragraph', 'jus_p');
@@ -125,7 +125,7 @@ class WordController extends CI_Controller {
    
         $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'Word2007');
         // FileIO::headerDownloadDocx('Form Pengajuan Mutu - ' . $pengiriman['nama_pengiriman']);
-        FileIO::headerDownloadDocx('SK_'.$dataPasien['0']['nama']);
+        FileIO::headerDownloadDocx('SK_'.$dataPasien['nama']);
         
         $objWriter->save("php://output");
         // } catch(Exception $e){
