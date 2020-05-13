@@ -191,7 +191,7 @@ class DinkesController extends CI_Controller {
 			$idUser = $this->UserModel->addUser($data);
       $this->email_send($data,'newuser');
   
-      $data = $this->DinkesModel->getAllPasien(['id_pasien' => $idPasien]);
+      $data = $this->DinkesModel->getAllPasienProv4(['id_pasien' => $idPasien]);
       $data = $data[$idPasien];
 			echo json_encode(array("data" => $data));
 		} catch (Exception $e) {
