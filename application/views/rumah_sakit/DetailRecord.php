@@ -147,7 +147,7 @@
                 </select>
               </div>
               <div class ="form-group">
-                <label for="before_status">Status Kesimpulan</label>
+                <label for="before_status">Status Kesehatan (Untuk Surat Keterangan Sehat)</label>
                 <select class="form-control mr-sm-2" id="after_status" name="after_status" required="required">
                 </select>
               </div>
