@@ -210,7 +210,7 @@ class DinkesModel extends CI_Model {
           'diare', 'mual_muntah', 'xray', 'hasil_xray', 'lekousit', 'limposit', 'trombosit',
            'ventilator', 'status_kesehatan', 'usap_nasofaring', 'date_usap_nasofaring',
             'usap_orofaring', 'date_usap_orofaring', 'sputum', 'date_sputum', 'serum',
-             'date_serum', 'lainnya1', 'lainnya1_text', 'date_lainnya1', 'lainnya2', 'lock_record','status_bayar','no_antri','hasil_igm','hasil_igg',
+             'date_serum', 'lainnya1', 'lainnya1_text', 'date_lainnya1', 'lainnya2', 'lock_record','status_bayar','no_antri','hasil_igm','hasil_igg','tekanan_darah','tinggi_badan','berat_badan',
              'lainnya2_text', 'date_lainnya2', 'kesimpulan','tahap','instansi','tanggal_pengambilan_sampel','jenis','no_sampel','tanggal_hasil_labor','hasil_labor'
         ], TRUE));
         $this->db->where('id_record', $data['id_record']);

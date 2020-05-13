@@ -146,6 +146,11 @@
                 <select class="form-control mr-sm-2" id="hasil_igg" name="hasil_igg" required="required">
                 </select>
               </div>
+              <div class ="form-group">
+                <label for="before_status">Status Kesimpulan</label>
+                <select class="form-control mr-sm-2" id="after_status" name="after_status" required="required">
+                </select>
+              </div>
             </div> 
 
             <div class="form-group col-md-8">
@@ -173,12 +178,12 @@
 
   <!-- div E -->
 
-  <div hidden class="row">
+  <div class="row">
   <!--  -->
     <div class="col-lg-6">
       <div class="ibox">
         <div class="ibox-content">
-          <h5>D. TANDA GEJALA</h5>
+          <h5>TANDA GEJALA</h5>
           <div class="form-row">
             <label for="inputEmail1" class="col-sm-6 col-form-label">Tanggal onset Gejala</label>
             <div class="col-md-5">
@@ -296,7 +301,7 @@
     <div class="col-lg-6">
       <div class="ibox">
         <div class="ibox-content">
-          <h5>E. PEMERIKSAAN PENUNJANG</h5>
+          <h5>PEMERIKSAAN PENUNJANG</h5>
           <div class="form-row">
               <label for="xray" class="col-sm-3 custom-control">X-Ray Paru</label>
               <div class="custom-control custom-radio custom-control-inline">
@@ -309,10 +314,10 @@
               </div>
           </div>
           <div class="form-group col-md-12">
-              <label for="hasil_xray" class="col-sm-3 col-form-label">Hasil</label>
+              <label for="hasil_xray" class="col-sm-3 col-form-label">Hasil X-Ray Paru</label>
               <textarea rows="4" type="text" placeholder="" class="form-control" id="hasil_xray" name="hasil_xray" ></textarea>
           </div>
-          <h5>Hitung Sel Darah Putih</h5>
+ 
           <div class="form-row">
             <label for="inputEmail3" class="col-sm-4 col-form-label text-right">Lekousit</label>
             <div class="form-group col-md-4">
@@ -334,6 +339,31 @@
             </div>
             <label for="inputEmail3" class="col-sm-4 col-form-label"> /ul</label>
           </div>
+          
+
+
+          <div class="form-row">
+            <label for="inputEmail3" class="col-sm-4 col-form-label text-right">Tekanan Darah</label>
+            <div class="form-group col-md-4">
+              <input type="text" class="form-control" id="tekanan_darah"  name="tekanan_darah" placeholder="">
+            </div>
+            <label for="inputEmail3" class="col-sm-4 col-form-label"> mm/Hg</label>
+          </div>
+          <div class="form-row">
+            <label for="inputEmail3" class="col-sm-4 col-form-label text-right">Tinggi Badan</label>
+            <div class="form-group col-md-4">
+              <input type="text" class="form-control" id="tinggi_badan"  name="tinggi_badan" placeholder="">
+            </div>
+            <label for="inputEmail3" class="col-sm-4 col-form-label"> cm</label>
+          </div>
+          <div class="form-row">
+            <label for="inputEmail3" class="col-sm-4 col-form-label text-right">Berat Badan</label>
+            <div class="form-group col-md-4">
+              <input type="text" class="form-control" id="berat_badan"  name="berat_badan" placeholder="">
+            </div>
+            <label for="inputEmail3" class="col-sm-4 col-form-label"> kg</label>
+          </div>
+
           <div class="form-row">
               <label for="ventilator" class="col-sm-4 custom-control">Menggunakan Ventilator</label>
               <div class="custom-control custom-radio custom-control-inline">
@@ -367,11 +397,11 @@
   </div>
   <!-- div F -->
 
-  <div hidden class="row">
+  <div class="row">
     <div class="col-lg-12">
       <div class="ibox">
         <div class="ibox-content">
-          <h5>F. PENGAMBILAN SPESIMEN</h5>
+          <h5>PENGAMBILAN SPESIMEN</h5>
           <div class="form-row">
               <label for="usap_nasofaring" class="col-sm-3 text-right">Usap Nasofaring</label>
               <div class="custom-control custom-radio custom-control-inline">
@@ -480,7 +510,7 @@
     <div class="col-lg-12">
       <div class="ibox">
         <div class="ibox-content">
-          <h5>G. RIWAYAT KONTAK / PAPARAN DAN PERJALANAN LUAR KOTA</h5>
+          <h5>RIWAYAT KONTAK / PAPARAN DAN PERJALANAN LUAR KOTA</h5>
           <div class="table-responsive">
             <table id="FDataTablePaparan" class="table table-bordered table-hover" style="padding:0px">
               <thead>
@@ -523,7 +553,7 @@
     <div class="col-lg-12">
       <div class="ibox">
         <div class="ibox-content">
-          <h5>H. Pengambilan Sampel dan Hasil Laboratorium</h5>
+          <h5>Pengambilan Sampel dan Hasil Laboratorium</h5>
           <div id='h_sampel'></div>
 
         </div>
@@ -729,6 +759,7 @@ $(document).ready(function() {
     'rumah_sakit_kab': $('#info_container').find('#rumah_sakit_kab'),
     'dokter_nama': $('#info_container').find('#dokter_nama'),
     'dokter_nomorhp': $('#info_container').find('#dokter_nomorhp'),
+    'after_status': $('#info_container').find('#after_status'),
 
     'nama_pasien': $('#info_container').find('#nama_pasien'),
     'no_rekam': $('#info_container').find('#no_rekam'),
@@ -748,6 +779,9 @@ $(document).ready(function() {
     'lekousit': $('#info_container').find('#lekousit'),
     'limposit': $('#info_container').find('#limposit'),
     'trombosit': $('#info_container').find('#trombosit'),
+    'tekanan_darah': $('#info_container').find('#tekanan_darah'),
+    'tinggi_badan': $('#info_container').find('#tinggi_badan'),
+    'berat_badan': $('#info_container').find('#berat_badan'),
     'date_usap_nasofaring': $('#info_container').find('#date_usap_nasofaring'),
     'date_usap_orofaring': $('#info_container').find('#date_usap_orofaring'),
     'date_sputum': $('#info_container').find('#date_sputum'),
@@ -830,6 +864,10 @@ function lock_record(){
     info.lekousit.prop('disabled',true);
     info.limposit.prop('disabled',true);
     info.trombosit.prop('disabled',true);
+    info.tekanan_darah.prop('disabled',true);
+    info.tinggi_badan.prop('disabled',true);
+    info.berat_badan.prop('disabled',true);
+    info.after_status.prop('disabled',true);
     info.tanggal_onset.prop('disabled',true);
     info.date_usap_nasofaring.prop('disabled',true);
     info.date_usap_orofaring.prop('disabled',true);
@@ -918,7 +956,7 @@ function lock_record(){
       btnUpdate.hide();
       btnSend.hide();
       lock_record()
-      info.pdf.html(`<a style="width: 20%" class="btn btn-success my-3 mr-sm-3"  href="<?=site_url("PdfController/getPDFRecordRS/")?>?id_record=${id_record}"><i class='fa fa-download'></i> Hasil Laboratorium </a> <a style="width: 20%" class="btn btn-success my-3 mr-sm-3"  href="<?=site_url("WordController/getSKRS/")?>?id_record=${id_record}"><i class='fa fa-download'></i> Surat Keterangan </a>`);
+      info.pdf.html(`<a style="width: 20%" class="btn btn-success my-3 mr-sm-3"  href="<?=site_url("PdfController/getPDFRecordRS/")?>?id_record=${id_record}"><i class='fa fa-download'></i> Hasil Laboratorium </a> <a style="width: 20%" class="btn btn-success my-3 mr-sm-3"  href="<?=site_url("WordController/getSKRS/")?>?id_record=${id_record}"><i class='fa fa-download'></i> Surat Keterangan </a> <a style="width: 20%" class="btn btn-success my-3 mr-sm-3"  href="<?=site_url("WordController/getSKSehat/")?>?id_record=${id_record}"><i class='fa fa-download'></i> Surat Keterangan Sehat</a>`);
      }
      if(sessionData['id_role'] == '3'){
       btnUpdate.hide();
@@ -932,6 +970,8 @@ function lock_record(){
     if(dataRecord['pengirim_spesimen_dinkes'] == '2'){
       document.getElementById("pengirim_spesimen_dinkes").checked = true;
     }
+    info.after_status.val(dataRecord['after_status']? dataRecord['after_status'] : dataRecord['before_status'] );
+
     info.id_pasien.val(dataRecord['id_pasien']);
     info.id_record.val(dataRecord['id_record']);
     info.hasil_igm.val(dataRecord['hasil_igm']);
@@ -957,6 +997,9 @@ function lock_record(){
     info.lekousit.val(dataRecord['lekousit']);
     info.limposit.val(dataRecord['limposit']);
     info.trombosit.val(dataRecord['trombosit']);
+    info.tekanan_darah.val(dataRecord['tekanan_darah']);
+    info.tinggi_badan.val(dataRecord['tinggi_badan']);
+    info.berat_badan.val(dataRecord['berat_badan']);
 
     info.tanggal_onset.val(dataRecord['tanggal_onset']);
     if(dataRecord['panas'] == '2'){
@@ -1228,7 +1271,19 @@ function getAge(date) {
       error: function(e) {}
     });
   }
-
+  renderStatusSelection()
+  function renderStatusSelection(data){
+    info.after_status.empty();
+    info.after_status.append($('<option>', { value: "", text: ""}));
+    info.after_status.append($('<option>', { value: "99", text: "Sehat"}));
+    info.after_status.append($('<option>', { value: "1", text: "OTG"}));
+    info.after_status.append($('<option>', { value: "2", text: "ODP"}));
+    info.after_status.append($('<option>', { value: "3", text: "PDP"}));
+    info.after_status.append($('<option>', { value: "4", text: "Positive COVID-19"}));
+    info.after_status.append($('<option>', { value: "5", text: "Negative COVID-19"}));
+    info.after_status.append($('<option>', { value: "6", text: "Sembuh Dari COVID-19"}));
+  
+  }
 
   function renderTempatSampel(data){
     tahapModal.instansi.empty();

@@ -162,7 +162,7 @@ public function getPDFRecordRS(){
   // Setting jenis font
   $pdf->SetFont('Arial','B',12);
   // Membuat string
-  $pdf->Image(base_url('assets/img/head_rskim.jpg'), 5, 5, 200);
+  $pdf->Image(base_url('assets/img/head_rskim_hd.jpg'), 5, 5, 200);
   
   $pdf->Cell(50,46,' ',0,1);
 
@@ -170,29 +170,29 @@ public function getPDFRecordRS(){
 
   $pdf->Cell(35,7,'No. Rekam Medis',0,0);
   $pdf->Cell(40,7,': '.$data['no_rekam'] ,0,0);
-  $pdf->Cell(35,7,'',0,0);
+  $pdf->Cell(20,7,'',0,0);
   $pdf->Cell(35,7,'Nama Pasien',0,0);
-  $pdf->MultiCell(40,7,': '.$dataPasien['nama'] ,0,1);
+  $pdf->MultiCell(50,7,': '.$dataPasien['nama'] ,0,1);
 
   $pdf->Cell(35,7,'Tgl Rekam',0,0);
   $pdf->Cell(40,7,': '.substr($data['tanggal_record'],0,15) ,0,0);
-  $pdf->Cell(35,7,'',0,0);
+  $pdf->Cell(20,7,'',0,0);
   $pdf->Cell(35,7,'Umur',0,0);
-  $pdf->Cell(40,7,': '.$this->getAge($dataPasien['tanggal_lahir']) ,0,1);
+  $pdf->Cell(50,7,': '.$this->getAge($dataPasien['tanggal_lahir']) ,0,1);
   $pdf->Cell(35,7,'Tgl Hasil Selesai',0,0);
   $pdf->Cell(40,7,': '.substr($data['tanggal_hasil_labor'],0,15) ,0,0);
-  $pdf->Cell(35,7,'',0,0);
+  $pdf->Cell(20,7,'',0,0);
   $pdf->Cell(35,7,'Provinsi',0,0);
-  $pdf->MultiCell(40,7,': '.ucfirst(strtolower($dataPasien['nama_prov'])) ,0,1);
+  $pdf->MultiCell(50,7,': '.$dataPasien['nama_prov'] ,0,1);
 
 
 
 
   $pdf->Cell(35,7,'Dokter Pengirim',0,0);
   $pdf->Cell(40,7,': '.$data['dokter_nama'] ,0,0);
-  $pdf->Cell(35,7,'',0,0);
+  $pdf->Cell(20,7,'',0,0);
   $pdf->Cell(35,7,'Alamat Pasien',0,0);
-  $pdf->MultiCell(40,7,': '.$dataPasien['alamat'].' , '.ucfirst(strtolower($dataPasien['nama_kab'])).' , '.ucfirst(strtolower($dataPasien['nama_kel'])).' , '.ucfirst(strtolower($dataPasien['nama_kec'])) ,0,1);
+  $pdf->MultiCell(50,7,': '.$dataPasien['alamat'].', '.$dataPasien['nama_kel'].', '.$dataPasien['nama_kec'].', '.$dataPasien['nama_kab'] ,0,1);
 
   $x = $pdf->GetX();
   $y = $pdf->GetY();
