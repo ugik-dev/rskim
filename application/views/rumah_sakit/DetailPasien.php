@@ -226,7 +226,7 @@
               </div>
               <div class="col-sm-12">
                 <div class="form-group">
-                  <label for="tanggal_record">Tanggal </label> 
+                  <label for="tanggal_record">Tanggal (Untuk input manual : YYYY-MM-DD HH:mm)</label> 
                   <input type="datetime-local" class="form-control" id="tanggal_record" name="tanggal_record" required="required" >
                 </div>
               </div>
