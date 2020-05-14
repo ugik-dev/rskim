@@ -20,12 +20,12 @@
             <table id="FDataTable" class="table table-bordered table-hover" style="padding:0px">
               <thead>
                 <tr>
-                  <th style="width: 12%; text-align:center!important">No Antri</th>
-                  <th style="width: 16%; text-align:center!important">Tanggal</th>
-                  <th style="width: 24%; text-align:center!important">Nama</th>
-                  <th style="width: 24%; text-align:center!important">No Rekam Medis</th>
+                  <th style="width: 5%; text-align:center!important">No Antri</th>
+                  <th style="width: 10%; text-align:center!important">Tanggal</th>
+                  <th style="width: 25%; text-align:center!important">Nama</th>
+                  <th style="width: 25%; text-align:center!important">No Rekam Medis</th>
              
-                  <th style="width: 5%; text-align:center!important">Action</th>
+                  <th style="width: 25%; text-align:center!important">Action</th>
                   
                 </tr>
               </thead>
@@ -64,6 +64,15 @@ $(document).ready(function() {
     showCancelButton: true,
     confirmButtonColor: "#18a689",
     confirmButtonText: "Ya!",
+  };
+
+  var swalDeleteConfigure = {
+    title: "Konfirmasi hapus",
+    text: "Yakin akan menghapus data ini?",
+    type: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#DD6B55",
+    confirmButtonText: "Ya, Hapus!",
   };
 
   var FDataTable = $('#FDataTable').DataTable({
@@ -135,7 +144,9 @@ $(document).ready(function() {
     var renderData = [];
     Object.values(data).forEach((record) => {
       var detailButton = `<a class="btn btn-success" href="<?=site_url("RSController/DetailRecord/")?>?id_record=${record['id_record']}" class="dropdown-item"><i class='fa fa-pencil'></i>Form Rekam Medis</a>`;
-      var pembayaranButton = `<button class="pembayaran btn btn-warning" data-id='${record['id_record']}'><i class='fa fa-note'></i>Konfirmasi Pembayaran</button>`;
+      var pembayaranButton = `<button class="pembayaran btn btn-warning" data-id='${record['id_record']}'><i class='fa fa-note'></i>Konfirmasi Pembayaran</button>
+      <button class="delete btn btn-danger" data-id='${record['id_record']}'><i class='fa fa-trash'></i></button>
+    `;
   
       var deleteButton = `
         <a class="delete dropdown-item" data-id='${record['id_record']}'><i class='fa fa-trash'></i> Hapus Record</a>
@@ -156,11 +167,32 @@ $(document).ready(function() {
       `;
     //   var no_hp = record['no_hp_tim'] ? record['no_hp_tim'] : 'Tidak Ada';
     //   var photo = record['photo_tim'] ? `<img src="<?=base_url('uploads/photo/')?>${record['photo_tim']}" class="img-sm">` : 'Tidak Ada';
-      renderData.push([record['no_antri'],record['tanggal_record'],record['nama'],record['no_rekam'], record['status_bayar'] == '0' ? pembayaranButton : detailButton  ]);
+      renderData.push([record['no_antri'],record['tanggal_record'].substring(0,16),record['nama'],record['no_rekam'], record['status_bayar'] == '0' ? pembayaranButton : detailButton  ]);
     });
     FDataTable.clear().rows.add(renderData).draw('full-hold');
   }
-
+  FDataTable.on('click','.delete', function(){
+    event.preventDefault();
+    var id = $(this).data('id');
+    swal(swalDeleteConfigure).then((result) => {
+      if(!result.value){ return; }
+      $.ajax({
+        url: "<?=site_url('DinkesController/deleteRecord')?>", 'type': 'POST',
+        data: {'id_record': id},
+        success: function (data){
+          var json = JSON.parse(data);
+          if(json['error']){
+            swal("Delete Gagal", json['message'], "error");
+            return;
+          }
+          delete dataRecord[id];
+          swal("Delete Berhasil", "", "success");
+          renderRecord(dataRecord);
+        },
+        error: function(e) {}
+      });
+    });
+  });
   FDataTable.on('click','.pembayaran', function(){
    console.log('act pembayaran')
    event.preventDefault();

@@ -191,7 +191,7 @@
                   <th style="width: 12%; text-align:center!important">No Antri</th>
                   <th style="width: 24%; text-align:center!important">No Rekam Medis</th>
                   <th style="width: 16%; text-align:center!important">Tanggal</th>
-                  <th style="width: 5%; text-align:center!important">Action</th>
+                  <th style="width: 16%; text-align:center!important">Action</th>
                   
                 </tr>
               </thead>
@@ -765,7 +765,10 @@ function getAge(date) {
     var renderData = [];
     Object.values(data).forEach((record) => {
       var detailButton = `<a class="btn btn-success" href="<?=site_url("RSController/DetailRecord/")?>?id_record=${record['id_record']}" class="dropdown-item"><i class='fa fa-pencil'></i>Form Rekam Medis</a>`;
-      var pembayaranButton = `<button class="pembayaran btn btn-warning" data-id='${record['id_record']}'><i class='fa fa-note'></i> Konfirmasi Pembayaran</button>`;
+      var pembayaranButton = `<button class="pembayaran btn btn-warning" data-id='${record['id_record']}'><i class='fa fa-note'></i> Konfirmasi Pembayaran</button>
+      <button class="delete btn btn-danger" data-id='${record['id_record']}'><i class='fa fa-trash'></i></button>
+      
+      `;
       if(sessionData['id_role'] == 3 ){
         pembayaranButton = `<button class="btn btn-warning"><i class='fa fa-note'></i>Belum Konfirmasi Pembayaran</button>`;
       
@@ -789,7 +792,7 @@ function getAge(date) {
       `;
     //   var no_hp = record['no_hp_tim'] ? record['no_hp_tim'] : 'Tidak Ada';
     //   var photo = record['photo_tim'] ? `<img src="<?=base_url('uploads/photo/')?>${record['photo_tim']}" class="img-sm">` : 'Tidak Ada';
-      renderData.push([record['no_antri'],record['no_rekam'], record['tanggal_record'],record['status_bayar'] == '0' ? pembayaranButton : detailButton  ]);
+      renderData.push([record['no_antri'],record['no_rekam'], record['tanggal_record'].substring(0,16),record['status_bayar'] == '0' ? pembayaranButton : detailButton  ]);
     });
     FDataTable.clear().rows.add(renderData).draw('full-hold');
   }
