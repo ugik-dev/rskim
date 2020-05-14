@@ -3,7 +3,7 @@
 <nav class="navbar-default navbar-static-side" role="navigation">
   <div class="sidebar-collapse">
     <ul class="nav metismenu" id="side-menu">
-      <?= $this->load->view('Fragment/SidebarHeaderFragment', NULL, TRUE);?> q
+      <?= $this->load->view('Fragment/SidebarHeaderFragment', NULL, TRUE);?> 
       <li id="dashboard">
         <a href="<?=site_url('RSController/')?>"><i class="fa fa-home"></i> <span class="nav-label">Beranda</span></a>
       </li>
