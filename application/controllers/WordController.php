@@ -87,10 +87,25 @@ class WordController extends CI_Controller {
         'height'           => round(\PhpOffice\PhpWord\Shared\Converter::cmToPixel(2.6)),
         'positioning'      => \PhpOffice\PhpWord\Style\Image::POSITION_ABSOLUTE,
         'posHorizontal' => \PhpOffice\PhpWord\Style\Image::POSITION_ABSOLUTE,
-    'posVertical' => \PhpOffice\PhpWord\Style\Image::POSITION_ABSOLUTE,
-     'marginLeft'       => round(\PhpOffice\PhpWord\Shared\Converter::cmToPixel(-0.5)),
+        'posVertical' => \PhpOffice\PhpWord\Style\Image::POSITION_ABSOLUTE,
+        'marginLeft'       => round(\PhpOffice\PhpWord\Shared\Converter::cmToPixel(-0.5)),
         'marginTop'        => round(\PhpOffice\PhpWord\Shared\Converter::cmToPixel(-0.5)),
       ));
+
+      if(file_exists('./assets/qrcode/'.$data['id_record'].'.png')){
+        // $pdf->Image(base_url('assets/qrcode/'.$data['id_record'].'.png'), 170, 160, -300);
+        $section->addImage(base_url('assets/qrcode/'.$data['id_record'].'.png'),array(
+          'height'           => round(\PhpOffice\PhpWord\Shared\Converter::cmToPixel(2.6)),
+          'positioning'      => \PhpOffice\PhpWord\Style\Image::POSITION_ABSOLUTE,
+          'posHorizontal' => \PhpOffice\PhpWord\Style\Image::POSITION_ABSOLUTE,
+          'posVertical' => \PhpOffice\PhpWord\Style\Image::POSITION_ABSOLUTE,
+          'marginLeft'       => round(\PhpOffice\PhpWord\Shared\Converter::cmToPixel(1)),
+          'marginTop'        => round(\PhpOffice\PhpWord\Shared\Converter::cmToPixel(10.8)),
+        ));
+      }else{
+        
+      }
+
       $section->addTextBreak();
       $section->addTextBreak();
       $section->addTextBreak();
@@ -195,6 +210,21 @@ class WordController extends CI_Controller {
  'marginLeft'       => round(\PhpOffice\PhpWord\Shared\Converter::cmToPixel(-0.5)),
     'marginTop'        => round(\PhpOffice\PhpWord\Shared\Converter::cmToPixel(-0.5)),
   ));
+
+  if(file_exists('./assets/qrcode/'.$data['id_record'].'.png')){
+    // $pdf->Image(base_url('assets/qrcode/'.$data['id_record'].'.png'), 170, 160, -300);
+    $section->addImage(base_url('assets/qrcode/'.$data['id_record'].'.png'),array(
+      'height'           => round(\PhpOffice\PhpWord\Shared\Converter::cmToPixel(2.6)),
+      'positioning'      => \PhpOffice\PhpWord\Style\Image::POSITION_ABSOLUTE,
+      'posHorizontal' => \PhpOffice\PhpWord\Style\Image::POSITION_ABSOLUTE,
+      'posVertical' => \PhpOffice\PhpWord\Style\Image::POSITION_ABSOLUTE,
+      'marginLeft'       => round(\PhpOffice\PhpWord\Shared\Converter::cmToPixel(10.1)),
+      'marginTop'        => round(\PhpOffice\PhpWord\Shared\Converter::cmToPixel(4.2)),
+    ));
+  }else{
+    
+  }
+
   $section->addTextBreak();
   $section->addTextBreak();
   $section->addTextBreak();

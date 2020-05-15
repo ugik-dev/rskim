@@ -245,6 +245,29 @@ class DinkesController extends CI_Controller {
 			ExceptionHandler::handle($e);
 		}
   }
+
+  public function addQRCode($id_record){
+ 
+    $this->load->library('ciqrcode'); //pemanggilan library QR CODE
+  
+    $config['cacheable']    = false; //boolean, the default is true
+    $config['cachedir']     = './assets/'; //string, the default is application/cache/
+    $config['errorlog']     = './assets/'; //string, the default is application/logs/
+    $config['imagedir']     = './assets/qrcode/'; //direktori penyimpanan qr code
+    $config['quality']      = true; //boolean, the default is true
+    $config['size']         = '600'; //interger, the default is 1024
+    $config['black']        = array(224,255,255); // array, default is array(255,255,255)
+    $config['white']        = array(70,130,180); // array, default is array(0,0,0)
+    $this->ciqrcode->initialize($config);
+  
+    $image_name= $id_record.'.png'; //buat name dari qr code sesuai dengan nim
+  
+    $params['data'] = site_url().'RSController/DetailRecord/?id_record='.$id_record; //data yang akan di jadikan QR CODE
+    $params['level'] = 'S'; //H=High
+    $params['size'] = 10;
+    $params['savename'] = FCPATH.$config['imagedir'].$image_name; //simpan image QR CODE ke folder assets/images/
+    $this->ciqrcode->generate($params); // fungsi untuk generate QR CODE
+  }
   
   public function editPasien(){
 		try{
@@ -277,6 +300,7 @@ class DinkesController extends CI_Controller {
 			$this->SecurityModel->userOnlyGuard(TRUE);
       $data = $this->input->post();
       $idRecord = $this->DinkesModel->editRecord($data);
+      if(!empty($data['make_qr'])) $this->addQRCode($data['id_record']);
       $data = $this->DinkesModel->getAllRecord(['id_record' => $idRecord]);
       $data = $data[$idRecord];
       if($data['lock_record'] == '1'){

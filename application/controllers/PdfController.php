@@ -139,6 +139,8 @@ function convertDateTime2($date){
 	return $tgl_indo.' '.substr($jam,0,5);
 }
 
+
+
 public function getPDFRecordRS(){
     
   require_once('assets/fpdf/fpdf.php');
@@ -163,11 +165,14 @@ public function getPDFRecordRS(){
   $pdf->SetFont('Arial','B',12);
   // Membuat string
   $pdf->Image(base_url('assets/img/head_rskim_hd.jpg'), 5, 5, 200);
-  
+  if(file_exists('./assets/qrcode/'.$data['id_record'].'.png')){
+    $pdf->Image(base_url('assets/qrcode/'.$data['id_record'].'.png'), 170, 160, -300);
+  }else{
+    
+  }
   $pdf->Cell(50,46,' ',0,1);
-
   $pdf->SetFont('Arial','',10);
-
+ 
   $pdf->Cell(35,7,'No. Rekam Medis',0,0);
   $pdf->Cell(40,7,': '.$data['no_rekam'] ,0,0);
   $pdf->Cell(20,7,'',0,0);
@@ -184,9 +189,6 @@ public function getPDFRecordRS(){
   $pdf->Cell(20,7,'',0,0);
   $pdf->Cell(35,7,'Provinsi',0,0);
   $pdf->MultiCell(50,7,': '.$dataPasien['nama_prov'] ,0,1);
-
-
-
 
   $pdf->Cell(35,7,'Dokter Pengirim',0,0);
   $pdf->Cell(40,7,': '.$data['dokter_nama'] ,0,0);
@@ -753,6 +755,32 @@ public function getPDFRecord(){
     }
 
   $pdf->Output('D',$dataPasien['nama'].'.pdf');
+}
+
+function addQRCode(){
+  // $nim=$this->input->post('nim');
+  // $nama=$this->input->post('nama');
+  // $prodi=$this->input->post('prodi');
+  $id_record = '69';
+  $this->load->library('ciqrcode'); //pemanggilan library QR CODE
+
+  $config['cacheable']    = false; //boolean, the default is true
+  $config['cachedir']     = './assets/'; //string, the default is application/cache/
+  $config['errorlog']     = './assets/'; //string, the default is application/logs/
+  $config['imagedir']     = './assets/qrcode/'; //direktori penyimpanan qr code
+  $config['quality']      = true; //boolean, the default is true
+  $config['size']         = '600'; //interger, the default is 1024
+  $config['black']        = array(224,255,255); // array, default is array(255,255,255)
+  $config['white']        = array(70,130,180); // array, default is array(0,0,0)
+  $this->ciqrcode->initialize($config);
+
+  $image_name= $id_record.'.png'; //buat name dari qr code sesuai dengan nim
+
+  $params['data'] = site_url().'RSController/DetailRecord/?id_record='.$id_record; //data yang akan di jadikan QR CODE
+  $params['level'] = 'S'; //H=High
+  $params['size'] = 10;
+  $params['savename'] = FCPATH.$config['imagedir'].$image_name; //simpan image QR CODE ke folder assets/images/
+  $this->ciqrcode->generate($params); // fungsi untuk generate QR CODE
 }
 
  }

@@ -201,7 +201,7 @@ $(document).ready(function() {
       if(!result.value){ return; }
       $.ajax({
         url: "<?=site_url('DinkesController/editRecord')?>", 'type': 'POST',
-        data: {'id_record': id, status_bayar : '1'},
+        data: {'id_record': id, status_bayar : '1', make_qr : '1'},
         success: function (data){
           var json = JSON.parse(data);
           if(json['error']){
