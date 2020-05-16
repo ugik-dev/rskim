@@ -100,10 +100,8 @@ class WordController extends CI_Controller {
           'posHorizontal' => \PhpOffice\PhpWord\Style\Image::POSITION_ABSOLUTE,
           'posVertical' => \PhpOffice\PhpWord\Style\Image::POSITION_ABSOLUTE,
           'marginLeft'       => round(\PhpOffice\PhpWord\Shared\Converter::cmToPixel(1)),
-          'marginTop'        => round(\PhpOffice\PhpWord\Shared\Converter::cmToPixel(10.8)),
+          'marginTop'        => round(\PhpOffice\PhpWord\Shared\Converter::cmToPixel(12)),
         ));
-      }else{
-        
       }
 
       $section->addTextBreak();
@@ -206,8 +204,8 @@ class WordController extends CI_Controller {
     $section->addImage(base_url('assets/img/head_rskim2.jpg'),array( 'height'           => round(\PhpOffice\PhpWord\Shared\Converter::cmToPixel(2.7)),
     'positioning'      => \PhpOffice\PhpWord\Style\Image::POSITION_ABSOLUTE,
     'posHorizontal' => \PhpOffice\PhpWord\Style\Image::POSITION_ABSOLUTE,
-'posVertical' => \PhpOffice\PhpWord\Style\Image::POSITION_ABSOLUTE,
- 'marginLeft'       => round(\PhpOffice\PhpWord\Shared\Converter::cmToPixel(-0.5)),
+    'posVertical' => \PhpOffice\PhpWord\Style\Image::POSITION_ABSOLUTE,
+    'marginLeft'       => round(\PhpOffice\PhpWord\Shared\Converter::cmToPixel(-0.5)),
     'marginTop'        => round(\PhpOffice\PhpWord\Shared\Converter::cmToPixel(-0.5)),
   ));
 
@@ -218,9 +216,9 @@ class WordController extends CI_Controller {
       'positioning'      => \PhpOffice\PhpWord\Style\Image::POSITION_ABSOLUTE,
       'posHorizontal' => \PhpOffice\PhpWord\Style\Image::POSITION_ABSOLUTE,
       'posVertical' => \PhpOffice\PhpWord\Style\Image::POSITION_ABSOLUTE,
-      'marginLeft'       => round(\PhpOffice\PhpWord\Shared\Converter::cmToPixel(10.1)),
-      'marginTop'        => round(\PhpOffice\PhpWord\Shared\Converter::cmToPixel(4.2)),
-    ));
+      'marginLeft'       => round(\PhpOffice\PhpWord\Shared\Converter::cmToPixel(1)),
+      'marginTop'        => round(\PhpOffice\PhpWord\Shared\Converter::cmToPixel(14)),
+      ));
   }else{
     
   }
