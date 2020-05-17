@@ -233,8 +233,7 @@
               <div hidden class="col-sm-12">
                   <div class ="form-group">
                     <label for="before_status">Status Awal</label>
-                    <select class="form-control mr-sm-2" id="before_status" name="before_status" required="required" readonly>
-                    </select>
+                    <input type="text" class="form-control" name="before_status" required="required" value="99" >
                   </div>
               </div>
               
@@ -600,7 +599,7 @@ console.log(sessionData)
     id_pasien_rec: $('#record_modal').find('#id_pasien_rec'),
     id_record: $('#record_modal').find('#id_record'),
     tanggal_record: $('#record_modal').find('#tanggal_record'),
-    before_status: $('#record_modal').find('#before_status'),
+    // before_status: $('#record_modal').find('#before_status'),
     no_antri: $('#record_modal').find('#no_antri'),
     rumah_sakit: $('#record_modal').find('#rumah_sakit'),
     deskripsi: $('#record_modal').find('#deskripsi'),
@@ -923,7 +922,7 @@ function getAge(date) {
     console.log(current);
     recordModal.id_record.val(current['id_record']);
     recordModal.deskripsi.val(current['deskripsi']);
-    recordModal.before_status.val(current['before_status']);
+    // recordModal.before_status.val(current['before_status']);
     recordModal.no_antri.val(current['no_antri']);
     recordModal.rumah_sakit.val(current['rumah_sakit']);
     var datecur = current['tanggal_record']
@@ -1016,14 +1015,14 @@ function getAge(date) {
       }));
     });
 
-    recordModal.before_status.empty();
-    recordModal.before_status.append($('<option>', { value: "", text: "-- Pilih Jenis --"}));
-    Object.values(data).forEach((d) => {
-      recordModal.before_status.append($('<option>', {
-        value: d['id_status'],
-        text: d['id_status'] + ' :: ' + d['nama_status'],
-      }));
-    });
+    // recordModal.before_status.empty();
+    // recordModal.before_status.append($('<option>', { value: "", text: "-- Pilih Jenis --"}));
+    // Object.values(data).forEach((d) => {
+    //   recordModal.before_status.append($('<option>', {
+    //     value: d['id_status'],
+    //     text: d['id_status'] + ' :: ' + d['nama_status'],
+    //   }));
+    // });
   }
 
   function getTim(){
@@ -1077,7 +1076,7 @@ function getAge(date) {
     recordModal.id_pasien_rec.val(dataInfo['id_pasien']);
     recordModal.saveEditBtn.hide();
     recordModal.addBtn.show();
-    recordModal.before_status.val(dataInfo['status']);
+    // recordModal.before_status.val(dataInfo['status']);
     recordModal.rumah_sakit.val(dataInfo['nama_puskesmas']);
     // recordModal.NO.val(dataInfo['NO']);
   });
