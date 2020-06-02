@@ -3,7 +3,7 @@
     Kalbu Intan Medika
     </div>
     <div>
-			<strong>Copyright</strong> Rumah Sakit Kalbu Intan Medika &copy; 2019
+			<strong>Copyright</strong> Rumah Sakit Kalbu Intan Medika &copy; 2020
     </div>
 </div>
 	<div id='installer' style="display:none">
