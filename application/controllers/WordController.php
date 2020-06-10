@@ -120,7 +120,8 @@ class WordController extends CI_Controller {
       $textrun->addTextBreak();
       $textrun->addTextBreak();
 
-      $textrun->addText("Yang bertanda tangan di bawah ini, Dokter ".$data['dokter_nama']." menerangkan dengan sesungguhnya bahwa :", 'paragraph', 'jus_p');
+      $textrun->addText("Yang bertanda tangan di bawah ini, Dokter RS KIM menerangkan dengan sesungguhnya bahwa :", 'paragraph', 'jus_p');
+      // $textrun->addText("Yang bertanda tangan di bawah ini, Dokter ".$data['dokter_nama']." menerangkan dengan sesungguhnya bahwa :", 'paragraph', 'jus_p');
       $textrun->addTextBreak();
       $textrun->addTextBreak();
       $textrun->addText("\tNama\t\t\t\t: ".$dataPasien['nama'], 'paragraph');
@@ -142,7 +143,7 @@ class WordController extends CI_Controller {
     $textrun->addText("\t\t\t\t\t ".$dataPasien['nama_prov'],'paragraph', 'jus_p');
     $textrun->addTextBreak();
       $textrun->addTextBreak();
-      $textrun->addText("Telah kami rapid test Antobody dengan hasil ", 'paragraph', 'jus_p');
+      $textrun->addText("Telah kami rapid test Antibody dengan hasil ", 'paragraph', 'jus_p');
       
       $textrun->addText("IgM : ".($data['hasil_igm'] == 'reaktif' ? 'Reaktif' : 'Non Reaktif' ) , 'paragraph_bold', 'jus_p');
       $textrun->addText(" - ", 'paragraph', 'jus_p');
