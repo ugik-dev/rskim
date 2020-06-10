@@ -120,7 +120,7 @@ class WordController extends CI_Controller {
       $textrun->addTextBreak();
       $textrun->addTextBreak();
 
-      $textrun->addText("Yang bertanda tangan di bawah ini, Dokter RS KIM menerangkan dengan sesungguhnya bahwa :", 'paragraph', 'jus_p');
+      $textrun->addText("Yang bertanda tangan di bawah ini, Dokter RS Kalbu Intan Medika menerangkan dengan sesungguhnya bahwa :", 'paragraph', 'jus_p');
       // $textrun->addText("Yang bertanda tangan di bawah ini, Dokter ".$data['dokter_nama']." menerangkan dengan sesungguhnya bahwa :", 'paragraph', 'jus_p');
       $textrun->addTextBreak();
       $textrun->addTextBreak();
