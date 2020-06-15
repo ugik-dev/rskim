@@ -31,7 +31,7 @@ class WordController extends CI_Controller {
     if($mm == '4') return 'POSITIVE COVID-19';
     if($mm == '5') return 'NEGATIVE COVID-19';
     if($mm == '6') return 'SEMBUH DARI COVID-19';
-    if($mm == '99') return 'SEHAT';
+    if($mm == '99') return 'SEHAT dan TIDAK ADA TANDA/GEJALA INFLUENZA';
   }
 
   function convertDateTime2($date,$cetak_hari){
@@ -268,7 +268,7 @@ class WordController extends CI_Controller {
     $textrun->addTextBreak();
     $textrun->addText("\t\t\t\t\t ".$dataPasien['nama_prov'],'paragraph', 'jus_p');
     $textrun->addTextBreak();
-    $textrun->addText("\tTekanan Darah\t\t: ".$data['tekanan_darah'].' mm/Hg','paragraph', 'jus_p');
+    $textrun->addText("\tTekanan Darah\t\t: ".$data['tekanan_darah'].' mmHg','paragraph', 'jus_p');
     $textrun->addTextBreak();
     $textrun->addText("\tTinggi Badan\t\t\t: ".$data['tinggi_badan'].' cm','paragraph', 'jus_p');
     $textrun->addTextBreak();

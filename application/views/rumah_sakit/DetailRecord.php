@@ -347,7 +347,7 @@
             <div class="form-group col-md-4">
               <input type="text" class="form-control" id="tekanan_darah"  name="tekanan_darah" placeholder="">
             </div>
-            <label for="inputEmail3" class="col-sm-4 col-form-label"> mm/Hg</label>
+            <label for="inputEmail3" class="col-sm-4 col-form-label"> mmHg</label>
           </div>
           <div class="form-row">
             <label for="inputEmail3" class="col-sm-4 col-form-label text-right">Tinggi Badan</label>
