@@ -153,6 +153,26 @@ class DinkesModel extends CI_Model {
 
     
     public function addRecord($data){
+
+      $tanggal = substr($data['tanggal_record'],0,10);
+      $this->db->select("no_antri");
+      $this->db->from("record_pasien");
+      // $this->db->where("tanggal_record like '". $tanggal."%' ");
+       $this->db->where("tanggal_record like '". $tanggal."%' ");
+       $this->db->order_by("no_antri",'desc');
+       $this->db->limit("1");
+
+     
+      $res = $this->db->get();
+      $noantri = $res->result_array();
+      // var_dump($tanggal);
+    
+      if(!empty($noantri[0])){
+        $data['no_antri'] = $noantri[0]['no_antri']+1;
+      }else{
+        $data['no_antri'] = '1';
+      }
+
       if(!empty($this->session->userdata('id_puskesmas'))){
         $data['id_puskesmas'] = $this->session->userdata('id_puskesmas');
       } 

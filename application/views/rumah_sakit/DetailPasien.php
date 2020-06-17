@@ -218,12 +218,12 @@
             <input type="hidden" id="id_pasien_rec" name="id_pasien">
             <input type="hidden" id="berbayar" name="berbayar" value='Ya'>
             <div class="row">
-              <div class="col-sm-12">
+              <!-- <div class="col-sm-12">
                   <div class="form-group">
                     <label for="tanggal_record">No Antri</label> 
                     <input type="text" class="form-control" id="no_antri" name="no_antri" required="required" >
                   </div>
-              </div>
+              </div> -->
               <div class="col-sm-12">
                 <div class="form-group">
                   <label for="tanggal_record">Tanggal (Untuk input manual : YYYY-MM-DD HH:mm)</label> 
@@ -600,7 +600,7 @@ console.log(sessionData)
     id_record: $('#record_modal').find('#id_record'),
     tanggal_record: $('#record_modal').find('#tanggal_record'),
     // before_status: $('#record_modal').find('#before_status'),
-    no_antri: $('#record_modal').find('#no_antri'),
+    // no_antri: $('#record_modal').find('#no_antri'),
     rumah_sakit: $('#record_modal').find('#rumah_sakit'),
     deskripsi: $('#record_modal').find('#deskripsi'),
     info: $('#record_modal').find('#info'),
