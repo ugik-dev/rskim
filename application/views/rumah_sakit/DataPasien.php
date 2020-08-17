@@ -3,10 +3,10 @@
     <div class="ibox-content">
       <form class="form-inline" id="toolbar_search" onsubmit="return false;">
         <input type="hidden" id="is_not_self2" name="is_not_self2" value="1">
-        <input type="text" placeholder="NIK" class="form-control my-1 mr-sm-2" id="by_nik" name="by_nik" style="max-width:300px">
-        <input type="text" placeholder="No KK" class="form-control my-1 mr-sm-2" id="by_nokk" name="by_nokk" style="max-width:300px">      
+        <input type="text" placeholder="Nama / NIK " class="form-control col-lg-6 my-1 mr-sm-2" id="by_name_or_nik" name="by_name_or_nik" style="max-width:300px">
+        <!-- <input type="text" placeholder="No KK" class="form-control my-1 mr-sm-2" id="by_nokk" name="by_nokk" style="max-width:300px">       -->
         <!-- <select class="form-control mr-sm-2" name="kd_perusahaan" id="kd_perusahaan" ></select> -->
-        <button type="button" class="btn btn-success my-1 mr-sm-2" id="src_btn" ><i class="fal fa-search"></i> Cari</button>
+        <button type="submit" class="btn btn-success col-lg-2 my-1 mr-sm-2" id="src_btn" data-loading-text="Loading..." ><i class="fal fa-search"></i> Cari</button>
       </form>
     </div>
   </div>
@@ -14,6 +14,13 @@
   <div class="ibox ssection-container">
     <div class="ibox-content">
       <form class="form-inline" id="toolbar_form" onsubmit="return false;">
+      <div class="col-sm-12">
+        <button type="submit" class="btn btn-success my-1 mr-sm-2" id="show_btn"  data-loading-text="Loading..." onclick="this.form.target='show'"><i class="fal fa-eye"></i> Tampilkan</button>
+        <button type="submit" class="btn btn-primary my-1 mr-sm-2" id="add_btn"  data-loading-text="Loading..." onclick="this.form.target='add'"><i class="fal fa-plus"></i> Tambah</button>
+      </div>
+      <div class="col-sm-12">
+      <input type="text" placeholder="Nama" class="form-control my-1 mr-sm-2" id="by_name_or_nik" name="by_name_or_nik" style="max-width:300px">
+     
       <select class="form-control mr-sm-2" name="kd_prov" id="kd_prov"></select>
    
         <select class="form-control mr-sm-2" name="kd_kab" id="kd_kab"></select>
@@ -22,10 +29,8 @@
         <!-- <select class="form-control mr-sm-2" name="sta_pkh" id="sta_pkh"></select>
         <select class="form-control mr-sm-2" name="sta_rastra" id="sta_rastra"></select> -->
    
-        <button type="submit" class="btn btn-success my-1 mr-sm-2" id="show_btn"  data-loading-text="Loading..." onclick="this.form.target='show'"><i class="fal fa-eye"></i> Tampilkan</button>
-        <button type="submit" class="btn btn-primary my-1 mr-sm-2" id="add_btn"  data-loading-text="Loading..." onclick="this.form.target='add'"><i class="fal fa-plus"></i> Tambah</button>
         <a hidden type="" class="btn btn-light my-1 mr-sm-2" id="export_btn"  data-loading-text="Loading..."><i class="fal fa-download"></i> Export PDF</a>
-   
+        </div>
       </form>
     </div>
   </div>
@@ -38,12 +43,9 @@
             <table id="FDataTable" class="table table-bordered table-hover" style="padding:0px">
               <thead>
                 <tr>
-      
                   <th style="width: 15%; text-align:center!important">Nama</th>
                   <th style="width: 12%; text-align:center!important">NIK</th>
                   <th style="width: 12%; text-align:center!important">Kab/Kecamatan</th>
-                  
-                  
                   <!-- <th style="width: 10%; text-align:center!important">Status</th> -->
                   <th style="width: 7%; text-align:center!important">Action</th>
                 </tr>
@@ -292,11 +294,18 @@ $(document).ready(function() {
     'addBtn': $('#show_btn'),
     'kd_kab': $('#toolbar_form').find('#kd_kab'),
     'kd_prov': $('#toolbar_form').find('#kd_prov'),
-   
     'kd_kec': $('#toolbar_form').find('#kd_kec'),
     'kd_kel': $('#toolbar_form').find('#kd_kel'),
     'sta_pkh': $('#toolbar_form').find('#sta_pkh'),
     'sta_rastra': $('#toolbar_form').find('#sta_rastra'),
+
+  }
+
+  var toolbarSrc = {
+    'form': $('#toolbar_search'),
+    'srcBtn': $('#src_btn'),
+    // 'addBtn': $('#show_btn'),
+    'by_name_or_nik': $('#toolbar_search').find('#by_name_or_nik'),
 
   }
 
@@ -305,6 +314,7 @@ $(document).ready(function() {
   var FDataTable = $('#FDataTable').DataTable({
     'columnDefs': [],
     deferRender: true,
+    'searching': false,
     "order": [[ 0, "desc" ]]
   });
 
@@ -385,6 +395,29 @@ $(document).ready(function() {
         break;
     }
   });
+
+  toolbarSrc.form.submit(function(event){
+    console.log('2');
+    event.preventDefault();
+    buttonLoading(toolbarSrc.srcBtn);
+    $.ajax({
+      url: `<?=site_url('DinkesController/getAllPasienProv')?>`, 'type': 'GET',
+      data: toolbarSrc.form.serialize(),
+      success: function (data){
+        buttonIdle(toolbarSrc.srcBtn);
+        var json = JSON.parse(data);
+        if(json['error']){
+          swal("Simpan Gagal", json['message'], "error");
+          return;
+        }
+        dataPasien = json['data'];
+        renderPasien(dataPasien);
+      },
+      error: function(e) {}
+    });
+    
+  });
+
   getAllProv();
   function getAllProv(){
     return $.ajax({

@@ -31,11 +31,12 @@ class DinkesModel extends CI_Model {
       if(!empty($filter['id_pasien'])) $this->db->where("ssk.id_pasien", $filter['id_pasien']);
       if(!empty($filter['id_puskesmas'])) $this->db->where("ssk.id_puskesmas", $filter['id_puskesmas']);
       if(!empty($filter['kd_prov'])) $this->db->where("SUBSTRING_INDEX(ssk.kode_wilayah, '.', 1) = ", $filter['kd_prov']);
-  
       if(!empty($filter['kd_kab'])) $this->db->where("SUBSTRING_INDEX(ssk.kode_wilayah, '.', 2) =", $filter['kd_kab']);
       if(!empty($filter['kd_kec'])) $this->db->where("SUBSTRING_INDEX(ssk.kode_wilayah, '.', 3) =" , $filter['kd_kec']);
       if(!empty($filter['kd_kel'])) $this->db->where("SUBSTRING_INDEX(ssk.kode_wilayah, '.', 4) =", $filter['kd_kel']);
       if(!empty($filter['by_nik'])) $this->db->where("ssk.NIK", $filter['by_nik']);
+      if(!empty($filter['by_name_or_nik'])) $this->db->where("ssk.nama like '%".$filter['by_name_or_nik']."%'");
+   
       //  $this->db->GROUP_BY("ssk.NoKK");
         $this->db->limit("1000");
       $res = $this->db->get();
