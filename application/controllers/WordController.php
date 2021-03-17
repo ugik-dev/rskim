@@ -143,13 +143,13 @@ class WordController extends CI_Controller {
     $textrun->addText("\t\t\t\t\t ".$dataPasien['nama_prov'],'paragraph', 'jus_p');
     $textrun->addTextBreak();
       $textrun->addTextBreak();
-      $textrun->addText("Telah kami rapid test Antibody dengan hasil ", 'paragraph', 'jus_p');
+      $textrun->addText("Telah kami Rapid Test Antigen COVID-19 / SARS COV-2 dengan hasil ", 'paragraph', 'jus_p');
       
-      $textrun->addText("IgM : ".($data['hasil_igm'] == 'reaktif' ? 'Reaktif' : 'Non Reaktif' ) , 'paragraph_bold', 'jus_p');
-      $textrun->addText(" - ", 'paragraph', 'jus_p');
-      $textrun->addText(" IgG : ".($data['hasil_igg'] == 'reaktif' ? 'Reaktif' : 'Non Reaktif'  ), 'paragraph_bold', 'jus_p');
+      $textrun->addText(": ".($data['hasil_igm'] == 'POSITIF' ? 'POSITIF.' : 'NEGATIF.' ) , 'paragraph_bold', 'jus_p');
+      // $textrun->addText(" - ", 'paragraph', 'jus_p');
+      // $textrun->addText(" IgG : ".($data['hasil_igg'] == 'reaktif' ? 'Reaktif' : 'Non Reaktif'  ), 'paragraph_bold', 'jus_p');
 
-      $textrun->addText(" dan kami lampirkan hasil pemeriksaan Rapid Test. ", 'paragraph', 'jus_p');
+      // $textrun->addText(" dan kami lampirkan hasil pemeriksaan Rapid Test. ", 'paragraph', 'jus_p');
       $textrun->addTextBreak();
       $textrun->addTextBreak();
       $textrun->addText("Demikian surat keterangan ini dibuat untuk dapat dipergunakan sebagaimana mestinya ", 'paragraph', 'jus_p');

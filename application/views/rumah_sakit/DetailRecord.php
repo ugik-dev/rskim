@@ -137,11 +137,11 @@
             
             <div class="form-group col-md-4">
               <div class ="form-group">
-                <label for="hasil_igm">Hasil IgM</label>
+                <label for="hasil_igm">Hasil Antigen Covid 19</label>
                 <select class="form-control mr-sm-2" id="hasil_igm" name="hasil_igm"  required="required">
                 </select>
               </div>
-              <div class ="form-group">
+              <!-- <div class ="form-group">
                 <label for="hasil_igm">Hasil IgG</label>
                 <select class="form-control mr-sm-2" id="hasil_igg" name="hasil_igg" required="required">
                 </select>
@@ -150,7 +150,7 @@
                 <label for="before_status">Status Kesehatan (Untuk Surat Keterangan Sehat)</label>
                 <select class="form-control mr-sm-2" id="after_status" name="after_status" required="required">
                 </select>
-              </div>
+              </div> -->
             </div> 
 
             <div class="form-group col-md-8">
@@ -856,7 +856,7 @@ function lock_record(){
     info.dinkes_prov.prop('disabled',true);
     info.rumah_sakit.prop('disabled',true);
     info.rumah_sakit_kab.prop('disabled',true);
-    info.hasil_igg.prop('disabled',true);
+    // info.hasil_igg.prop('disabled',true);
     info.hasil_igm.prop('disabled',true);
     info.dokter_nama.prop('disabled',true);
     info.dokter_nomorhp.prop('disabled',true);
@@ -975,7 +975,7 @@ function lock_record(){
     info.id_pasien.val(dataRecord['id_pasien']);
     info.id_record.val(dataRecord['id_record']);
     info.hasil_igm.val(dataRecord['hasil_igm']);
-    info.hasil_igg.val(dataRecord['hasil_igg']);
+    // info.hasil_igg.val(dataRecord['hasil_igg']);
     info.deskripsi.val(dataRecord['deskripsi']);
     info.dinkes_kab.val(dataRecord['dinkes_kab']);
     info.dinkes_prov.val(dataRecord['dinkes_prov']);
@@ -1232,16 +1232,16 @@ function lock_record(){
   // }
 
   function renderHasilIg(){
-    info.hasil_igg.empty();
-    info.hasil_igg.append($('<option>', { value: "", text: "-- Pilih Hasil IgG --"}));
-    info.hasil_igg.append($('<option>', { value: "reaktif", text: "Reaktif"}));
-    info.hasil_igg.append($('<option>', { value: "non_reaktif", text: "Non Reaktif"}));
+    // info.hasil_igg.empty();
+    // info.hasil_igg.append($('<option>', { value: "", text: "-- Pilih Hasil IgG --"}));
+    // info.hasil_igg.append($('<option>', { value: "reaktif", text: "Reaktif"}));
+    // info.hasil_igg.append($('<option>', { value: "non_reaktif", text: "Non Reaktif"}));
    
 
     info.hasil_igm.empty();
-    info.hasil_igm.append($('<option>', { value: "", text: "-- Pilih Hasil IgM --"}));
-    info.hasil_igm.append($('<option>', { value: "reaktif", text: "Reaktif"}));
-    info.hasil_igm.append($('<option>', { value: "non_reaktif", text: "Non Reaktif"}));
+    info.hasil_igm.append($('<option>', { value: "", text: "-- Pilih Hasil --"}));
+    info.hasil_igm.append($('<option>', { value: "reaktif", text: "POSITIF"}));
+    info.hasil_igm.append($('<option>', { value: "non_reaktif", text: "NEGATIF"}));
    
   }
 
